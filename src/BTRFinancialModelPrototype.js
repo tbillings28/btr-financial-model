@@ -356,6 +356,16 @@ const BTRFinancialModelPrototype = () => {
     }));
   };
   
+  // Handle LP/GP split change
+  const handleSplitChange = (e) => {
+    const lpSplitValue = parseFloat(e.target.value);
+    setInputs(prev => ({
+      ...prev,
+      lpSplit: lpSplitValue,
+      gpSplit: 1 - lpSplitValue // GP gets the remainder
+    }));
+  };
+  
   // Format currency
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', {
@@ -433,6 +443,29 @@ const BTRFinancialModelPrototype = () => {
               <option value={0.08}>8%</option>
               <option value={0.09}>9%</option>
             </select>
+          </div>
+          
+          {/* New Profit Share Split Input */}
+          <div className="btr-input-group">
+            <label className="btr-label">LP/GP Profit Share Split</label>
+            <select
+              value={inputs.lpSplit}
+              onChange={handleSplitChange}
+              className="btr-input"
+            >
+              <option value={1.00}>100% / 0%</option>
+              <option value={0.95}>95% / 5%</option>
+              <option value={0.90}>90% / 10%</option>
+              <option value={0.85}>85% / 15%</option>
+              <option value={0.80}>80% / 20%</option>
+              <option value={0.75}>75% / 25%</option>
+              <option value={0.70}>70% / 30%</option>
+              <option value={0.65}>65% / 35%</option>
+              <option value={0.60}>60% / 40%</option>
+              <option value={0.55}>55% / 45%</option>
+              <option value={0.50}>50% / 50%</option>
+            </select>
+            <p className="btr-note">LP / GP (after preferred return)</p>
           </div>
         </div>
         
@@ -709,11 +742,33 @@ const BTRFinancialModelPrototype = () => {
           </div>
           
           <div className="btr-metric btr-metric-orange">
-            <h3 className="btr-metric-title">Total Investment</h3>
-            <p className="btr-metric-value">
-              {results.acquisitionSummary.equityRequired ? formatCurrency(results.acquisitionSummary.equityRequired) : '-'}
-            </p>
+  <h3 className="btr-metric-title">Total Investment</h3>
+  <p className="btr-metric-value">
+    {results.acquisitionSummary.equityRequired ? formatCurrency(results.acquisitionSummary.equityRequired) : '-'}
+  </p>
+</div>
+        </div>
+        
+        {/* Add display of LP/GP split in the dashboard */}
+        <div className="btr-profit-split-display">
+          <h3 className="btr-profit-split-title">Profit Share Structure</h3>
+          <div className="btr-profit-split-bars">
+            <div className="btr-profit-split-bar">
+              <div 
+                className="btr-profit-split-segment btr-segment-lp" 
+                style={{width: `${inputs.lpSplit * 100}%`}}
+              >
+                LP: {(inputs.lpSplit * 100).toFixed(0)}%
+              </div>
+              <div 
+                className="btr-profit-split-segment btr-segment-gp" 
+                style={{width: `${inputs.gpSplit * 100}%`}}
+              >
+                GP: {(inputs.gpSplit * 100).toFixed(0)}%
+              </div>
+            </div>
           </div>
+          <p className="btr-note">Distribution after {(inputs.preferredReturn * 100).toFixed(0)}% preferred return</p>
         </div>
       </div>
       
@@ -770,7 +825,9 @@ const BTRFinancialModelPrototype = () => {
                 <th className="btr-table-cell">NOI</th>
                 <th className="btr-table-cell">Debt Service</th>
                 <th className="btr-table-cell">DSCR</th>
-                <th className="btr-table-cell">Investor Distributions</th>
+                <th className="btr-table-cell">Preferred Return</th>
+                <th className="btr-table-cell">LP Distribution</th>
+                <th className="btr-table-cell">GP Distribution</th>
                 <th className="btr-table-cell">Cash Yield</th>
               </tr>
             </thead>
@@ -781,10 +838,63 @@ const BTRFinancialModelPrototype = () => {
                   <td className="btr-table-cell">{formatCurrency(year.noi)}</td>
                   <td className="btr-table-cell">{formatCurrency(year.debtService)}</td>
                   <td className="btr-table-cell">{year.dscr.toFixed(2)}</td>
+                  <td className="btr-table-cell">{formatCurrency(year.preferredReturnPaid)}</td>
                   <td className="btr-table-cell">{formatCurrency(year.lpDistribution)}</td>
+                  <td className="btr-table-cell">{formatCurrency(year.gpDistribution)}</td>
                   <td className="btr-table-cell">{year.cashYield.toFixed(2)}%</td>
                 </tr>
               ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      {/* Exit Summary */}
+      <div className="btr-card btr-full-width">
+        <h2 className="btr-section-title">Exit Summary</h2>
+        <div className="btr-table-container">
+          <table className="btr-table">
+            <tbody>
+              <tr className="btr-table-row">
+                <td className="btr-table-cell">Gross Sale Proceeds</td>
+                <td className="btr-table-cell">{formatCurrency(results.exitSummary.grossSaleProceeds || 0)}</td>
+              </tr>
+              <tr className="btr-table-row">
+                <td className="btr-table-cell">Selling Costs</td>
+                <td className="btr-table-cell">{formatCurrency(results.exitSummary.sellingCosts || 0)}</td>
+              </tr>
+              <tr className="btr-table-row">
+                <td className="btr-table-cell">Net Sale Proceeds</td>
+                <td className="btr-table-cell">{formatCurrency(results.exitSummary.netSaleProceeds || 0)}</td>
+              </tr>
+              <tr className="btr-table-row">
+                <td className="btr-table-cell">Remaining Loan Balance</td>
+                <td className="btr-table-cell">{formatCurrency(results.exitSummary.remainingLoanBalance || 0)}</td>
+              </tr>
+              <tr className="btr-table-row">
+                <td className="btr-table-cell">Net Proceeds After Debt</td>
+                <td className="btr-table-cell">{formatCurrency(results.exitSummary.netProceedsAfterDebt || 0)}</td>
+              </tr>
+              <tr className="btr-table-row">
+                <td className="btr-table-cell">Return of Capital</td>
+                <td className="btr-table-cell">{formatCurrency(results.exitSummary.returnOfCapital || 0)}</td>
+              </tr>
+              <tr className="btr-table-row">
+                <td className="btr-table-cell">Preferred Return</td>
+                <td className="btr-table-cell">{formatCurrency(results.exitSummary.preferredReturnAtExit || 0)}</td>
+              </tr>
+              <tr className="btr-table-row">
+                <td className="btr-table-cell">LP Profit Share</td>
+                <td className="btr-table-cell">{formatCurrency(results.exitSummary.lpProfit || 0)}</td>
+              </tr>
+              <tr className="btr-table-row">
+                <td className="btr-table-cell">GP Profit Share</td>
+                <td className="btr-table-cell">{formatCurrency(results.exitSummary.gpProfit || 0)}</td>
+              </tr>
+              <tr className="btr-table-row btr-row-highlight">
+                <td className="btr-table-cell">Total to LPs</td>
+                <td className="btr-table-cell">{formatCurrency(results.exitSummary.totalToLPs || 0)}</td>
+              </tr>
             </tbody>
           </table>
         </div>
