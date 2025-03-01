@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 // Add explicit styling for deployment environments
-import './BTRFinancialModel.css'; // We'll create this file separately
+import './BTRFinancialModel.css'; // Make sure this points to the updated CSS file
 
 const BTRFinancialModelPrototype = () => {
+  // Add theme state
+  const [isDarkMode, setIsDarkMode] = useState(true); // Default to dark mode to match investor presentation
+  
   // State for input assumptions (keeping your original code)
   const [inputs, setInputs] = useState({
     // Fund Structure
@@ -54,6 +57,11 @@ const BTRFinancialModelPrototype = () => {
     returns: {},
     portfolioValueChartData: []
   });
+  
+  // Toggle between dark and light mode
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
   
   // IRR calculation function
   const calculateIRR = (cashFlows) => {
@@ -366,15 +374,25 @@ const BTRFinancialModelPrototype = () => {
     }));
   };
   
-  // Format currency
-  const formatCurrency = (value) => {
+  // Updated formatCurrency function with option for short format
+const formatCurrency = (value, short = false) => {
+  if (short && Math.abs(value) >= 1000000) {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      notation: 'compact',
+      compactDisplay: 'short',
+      maximumFractionDigits: 1
     }).format(value);
-  };
+  }
+  
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(value);
+};
   
   // Format percentage
   const formatPercent = (value) => {
@@ -389,9 +407,28 @@ const BTRFinancialModelPrototype = () => {
     lpDistribution: year.lpDistribution
   }));
   
+  // LineChart custom colors for dark mode
+  const getChartColors = () => {
+    return {
+      portfolioValue: "#5aB6BF", // USDV teal for portfolio value
+      portfolioCost: "#ED8686",  // Soft red for costs
+      portfolioDebt: "#F5D776",  // Soft yellow for debt
+      lpEquity: "#7BE495",       // Soft green for equity
+      noi: "#5aB6BF",            // USDV teal for NOI
+      debtService: "#ED8686",    // Soft red for debt service
+      lpDistribution: "#7BE495"  // Soft green for LP distribution
+    };
+  };
+  
+  const chartColors = getChartColors();
+  
   return (
-    <div className="btr-container">
-      <h1 className="btr-title">BTR Financial Model Prototype</h1>
+    <div className={`btr-container ${!isDarkMode ? 'btr-light-mode' : ''}`}>
+      <button onClick={toggleTheme} className="btr-theme-toggle">
+        {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+      </button>
+      
+      <h1 className="btr-title">USDV BTR Financial Model</h1>
       
       <div className="btr-grid">
         <div className="btr-card">
@@ -438,469 +475,519 @@ const BTRFinancialModelPrototype = () => {
               onChange={handleInputChange}
               className="btr-input"
             >
-              <option value={0.06}>6%</option>
-              <option value={0.07}>7%</option>
-              <option value={0.08}>8%</option>
-              <option value={0.09}>9%</option>
-            </select>
-          </div>
-          
-          {/* New Profit Share Split Input */}
-          <div className="btr-input-group">
-            <label className="btr-label">LP/GP Profit Share Split</label>
-            <select
-              value={inputs.lpSplit}
-              onChange={handleSplitChange}
-              className="btr-input"
-            >
-              <option value={1.00}>100% / 0%</option>
-              <option value={0.95}>95% / 5%</option>
-              <option value={0.90}>90% / 10%</option>
-              <option value={0.85}>85% / 15%</option>
-              <option value={0.80}>80% / 20%</option>
-              <option value={0.75}>75% / 25%</option>
-              <option value={0.70}>70% / 30%</option>
-              <option value={0.65}>65% / 35%</option>
-              <option value={0.60}>60% / 40%</option>
-              <option value={0.55}>55% / 45%</option>
-              <option value={0.50}>50% / 50%</option>
-            </select>
-            <p className="btr-note">LP / GP (after preferred return)</p>
-          </div>
+            <option value={0.06}>6%</option>
+            <option value={0.07}>7%</option>
+            <option value={0.08}>8%</option>
+            <option value={0.09}>9%</option>
+          </select>
         </div>
         
-        <div className="btr-card">
-          <h2 className="btr-section-title">Financing</h2>
-          
+        {/* Profit Share Split Input */}
+        <div className="btr-input-group">
+          <label className="btr-label">LP/GP Profit Share Split</label>
+          <select
+            value={inputs.lpSplit}
+            onChange={handleSplitChange}
+            className="btr-input"
+          >
+            <option value={1.00}>100% / 0%</option>
+            <option value={0.95}>95% / 5%</option>
+            <option value={0.90}>90% / 10%</option>
+            <option value={0.85}>85% / 15%</option>
+            <option value={0.80}>80% / 20%</option>
+            <option value={0.75}>75% / 25%</option>
+            <option value={0.70}>70% / 30%</option>
+            <option value={0.65}>65% / 35%</option>
+            <option value={0.60}>60% / 40%</option>
+            <option value={0.55}>55% / 45%</option>
+            <option value={0.50}>50% / 50%</option>
+          </select>
+          <p className="btr-note">LP / GP (after preferred return)</p>
+        </div>
+      </div>
+      
+      <div className="btr-card">
+        <h2 className="btr-section-title">Financing</h2>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">Loan to Value (LTV)</label>
+          <select
+            name="loanToValue"
+            value={inputs.loanToValue}
+            onChange={handleInputChange}
+            className="btr-input"
+          >
+            <option value={0.6}>60%</option>
+            <option value={0.7}>70%</option>
+            <option value={0.8}>80%</option>
+          </select>
+        </div>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">Interest Rate</label>
+          <select
+            name="interestRate"
+            value={inputs.interestRate}
+            onChange={handleInputChange}
+            className="btr-input"
+          >
+            <option value={0.05}>5.000%</option>
+            <option value={0.05125}>5.125%</option>
+            <option value={0.0525}>5.250%</option>
+            <option value={0.05375}>5.375%</option>
+            <option value={0.055}>5.500%</option>
+            <option value={0.05625}>5.625%</option>
+            <option value={0.0575}>5.750%</option>
+            <option value={0.05875}>5.875%</option>
+            <option value={0.06}>6.000%</option>
+            <option value={0.06125}>6.125%</option>
+            <option value={0.0625}>6.250%</option>
+            <option value={0.06375}>6.375%</option>
+            <option value={0.065}>6.500%</option>
+            <option value={0.06625}>6.625%</option>
+            <option value={0.0675}>6.750%</option>
+            <option value={0.06875}>6.875%</option>
+            <option value={0.07}>7.000%</option>
+            <option value={0.07125}>7.125%</option>
+            <option value={0.0725}>7.250%</option>
+            <option value={0.07375}>7.375%</option>
+            <option value={0.075}>7.500%</option>
+            <option value={0.07625}>7.625%</option>
+            <option value={0.0775}>7.750%</option>
+            <option value={0.07875}>7.875%</option>
+            <option value={0.08}>8.000%</option>
+          </select>
+        </div>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">Hold Period (Years)</label>
+          <select
+            name="holdPeriodYears"
+            value={inputs.holdPeriodYears}
+            onChange={handleInputChange}
+            className="btr-input"
+          >
+            <option value={5}>5 Years</option>
+            <option value={7}>7 Years</option>
+            <option value={10}>10 Years</option>
+          </select>
+        </div>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">Exit Strategy</label>
+          <select
+            name="exitStrategy"
+            value={inputs.exitStrategy}
+            onChange={handleInputChange}
+            className="btr-input"
+          >
+            <option value="portfolio">Portfolio Sale</option>
+            <option value="individual">Individual Home Sales</option>
+          </select>
+        </div>
+        
+        {inputs.exitStrategy === "portfolio" && (
           <div className="btr-input-group">
-            <label className="btr-label">Loan to Value (LTV)</label>
+            <label className="btr-label">Exit Cap Rate</label>
             <select
-              name="loanToValue"
-              value={inputs.loanToValue}
+              name="portfolioExitCapRate"
+              value={inputs.portfolioExitCapRate}
               onChange={handleInputChange}
               className="btr-input"
             >
-              <option value={0.6}>60%</option>
-              <option value={0.7}>70%</option>
-              <option value={0.8}>80%</option>
+              <option value={0.045}>4.50%</option>
+              <option value={0.0475}>4.75%</option>
+              <option value={0.05}>5.00%</option>
+              <option value={0.0525}>5.25%</option>
+              <option value={0.055}>5.50%</option>
+              <option value={0.0575}>5.75%</option>
+              <option value={0.06}>6.00%</option>
+              <option value={0.0625}>6.25%</option>
+              <option value={0.065}>6.50%</option>
             </select>
+            <p className="btr-note">Lower cap rate = higher sale value</p>
           </div>
-          
+        )}
+        
+        {inputs.exitStrategy === "individual" && (
           <div className="btr-input-group">
-            <label className="btr-label">Interest Rate</label>
+            <label className="btr-label">Individual Sale Premium</label>
             <select
-              name="interestRate"
-              value={inputs.interestRate}
+              name="individualSalesPremium"
+              value={inputs.individualSalesPremium}
               onChange={handleInputChange}
               className="btr-input"
             >
-              <option value={0.05}>5.000%</option>
-              <option value={0.05125}>5.125%</option>
-              <option value={0.0525}>5.250%</option>
-              <option value={0.05375}>5.375%</option>
-              <option value={0.055}>5.500%</option>
-              <option value={0.05625}>5.625%</option>
-              <option value={0.0575}>5.750%</option>
-              <option value={0.05875}>5.875%</option>
-              <option value={0.06}>6.000%</option>
-              <option value={0.06125}>6.125%</option>
-              <option value={0.0625}>6.250%</option>
-              <option value={0.06375}>6.375%</option>
-              <option value={0.065}>6.500%</option>
-              <option value={0.06625}>6.625%</option>
-              <option value={0.0675}>6.750%</option>
-              <option value={0.06875}>6.875%</option>
-              <option value={0.07}>7.000%</option>
-              <option value={0.07125}>7.125%</option>
-              <option value={0.0725}>7.250%</option>
-              <option value={0.07375}>7.375%</option>
-              <option value={0.075}>7.500%</option>
-              <option value={0.07625}>7.625%</option>
-              <option value={0.0775}>7.750%</option>
-              <option value={0.07875}>7.875%</option>
-              <option value={0.08}>8.000%</option>
-            </select>
-          </div>
-          
-          <div className="btr-input-group">
-            <label className="btr-label">Hold Period (Years)</label>
-            <select
-              name="holdPeriodYears"
-              value={inputs.holdPeriodYears}
-              onChange={handleInputChange}
-              className="btr-input"
-            >
-              <option value={5}>5 Years</option>
-              <option value={7}>7 Years</option>
-              <option value={10}>10 Years</option>
-            </select>
-          </div>
-          
-          <div className="btr-input-group">
-            <label className="btr-label">Exit Strategy</label>
-            <select
-              name="exitStrategy"
-              value={inputs.exitStrategy}
-              onChange={handleInputChange}
-              className="btr-input"
-            >
-              <option value="portfolio">Portfolio Sale</option>
-              <option value="individual">Individual Home Sales</option>
-            </select>
-          </div>
-          
-          {inputs.exitStrategy === "portfolio" && (
-            <div className="btr-input-group">
-              <label className="btr-label">Exit Cap Rate</label>
-              <select
-                name="portfolioExitCapRate"
-                value={inputs.portfolioExitCapRate}
-                onChange={handleInputChange}
-                className="btr-input"
-              >
-                <option value={0.045}>4.50%</option>
-                <option value={0.0475}>4.75%</option>
-                <option value={0.05}>5.00%</option>
-                <option value={0.0525}>5.25%</option>
-                <option value={0.055}>5.50%</option>
-                <option value={0.0575}>5.75%</option>
-                <option value={0.06}>6.00%</option>
-                <option value={0.0625}>6.25%</option>
-                <option value={0.065}>6.50%</option>
-              </select>
-              <p className="btr-note">Lower cap rate = higher sale value</p>
-            </div>
-          )}
-          
-          {inputs.exitStrategy === "individual" && (
-            <div className="btr-input-group">
-              <label className="btr-label">Individual Sale Premium</label>
-              <select
-                name="individualSalesPremium"
-                value={inputs.individualSalesPremium}
-                onChange={handleInputChange}
-                className="btr-input"
-              >
-                <option value={0.00}>0%</option>
-                <option value={0.025}>2.5%</option>
-                <option value={0.05}>5%</option>
-                <option value={0.075}>7.5%</option>
-                <option value={0.10}>10%</option>
-              </select>
-              <p className="btr-note">Premium over portfolio market value</p>
-            </div>
-          )}
-          
-          <div className="btr-input-group">
-            <label className="btr-label">Brokerage Fee</label>
-            <select
-              name="brokerageFee"
-              value={inputs.brokerageFee}
-              onChange={handleInputChange}
-              className="btr-input"
-            >
-              <option value={0.00}>0.0%</option>
-              <option value={0.005}>0.5%</option>
-              <option value={0.01}>1.0%</option>
-              <option value={0.015}>1.5%</option>
-              <option value={0.02}>2.0%</option>
+              <option value={0.00}>0%</option>
               <option value={0.025}>2.5%</option>
-              <option value={0.03}>3.0%</option>
-              <option value={0.035}>3.5%</option>
-              <option value={0.04}>4.0%</option>
-              <option value={0.045}>4.5%</option>
-              <option value={0.05}>5.0%</option>
-              <option value={0.055}>5.5%</option>
-              <option value={0.06}>6.0%</option>
+              <option value={0.05}>5%</option>
+              <option value={0.075}>7.5%</option>
+              <option value={0.10}>10%</option>
             </select>
+            <p className="btr-note">Premium over portfolio market value</p>
           </div>
+        )}
+        
+        <div className="btr-input-group">
+          <label className="btr-label">Brokerage Fee</label>
+          <select
+            name="brokerageFee"
+            value={inputs.brokerageFee}
+            onChange={handleInputChange}
+            className="btr-input"
+          >
+            <option value={0.00}>0.0%</option>
+            <option value={0.005}>0.5%</option>
+            <option value={0.01}>1.0%</option>
+            <option value={0.015}>1.5%</option>
+            <option value={0.02}>2.0%</option>
+            <option value={0.025}>2.5%</option>
+            <option value={0.03}>3.0%</option>
+            <option value={0.035}>3.5%</option>
+            <option value={0.04}>4.0%</option>
+            <option value={0.045}>4.5%</option>
+            <option value={0.05}>5.0%</option>
+            <option value={0.055}>5.5%</option>
+            <option value={0.06}>6.0%</option>
+          </select>
+        </div>
+      </div>
+      
+      <div className="btr-card">
+        <h2 className="btr-section-title">Property Details</h2>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">3-Bed Acquisition Price</label>
+          <input
+            type="number"
+            name="acquisitionPrice3Bed"
+            value={inputs.acquisitionPrice3Bed}
+            onChange={handleInputChange}
+            className="btr-input"
+          />
         </div>
         
-        <div className="btr-card">
-          <h2 className="btr-section-title">Property Details</h2>
-          
-          <div className="btr-input-group">
-            <label className="btr-label">3-Bed Acquisition Price</label>
-            <input
-              type="number"
-              name="acquisitionPrice3Bed"
-              value={inputs.acquisitionPrice3Bed}
-              onChange={handleInputChange}
-              className="btr-input"
-            />
-          </div>
-          
-          <div className="btr-input-group">
-            <label className="btr-label">3-Bed Market Value</label>
-            <input
-              type="number"
-              name="marketValue3Bed"
-              value={inputs.marketValue3Bed}
-              onChange={handleInputChange}
-              className="btr-input"
-            />
-          </div>
-          
-          <div className="btr-input-group">
-            <label className="btr-label">3-Bed Monthly Rent</label>
-            <input
-              type="number"
-              name="monthlyRent3Bed"
-              value={inputs.monthlyRent3Bed}
-              onChange={handleInputChange}
-              className="btr-input"
-            />
-          </div>
-          
-          <div className="btr-input-group">
-            <label className="btr-label">4-Bed Acquisition Price</label>
-            <input
-              type="number"
-              name="acquisitionPrice4Bed"
-              value={inputs.acquisitionPrice4Bed}
-              onChange={handleInputChange}
-              className="btr-input"
-            />
-          </div>
-          
-          <div className="btr-input-group">
-            <label className="btr-label">4-Bed Market Value</label>
-            <input
-              type="number"
-              name="marketValue4Bed"
-              value={inputs.marketValue4Bed}
-              onChange={handleInputChange}
-              className="btr-input"
-            />
-          </div>
-          
-          <div className="btr-input-group">
-            <label className="btr-label">4-Bed Monthly Rent</label>
-            <input
-              type="number"
-              name="monthlyRent4Bed"
-              value={inputs.monthlyRent4Bed}
-              onChange={handleInputChange}
-              className="btr-input"
-            />
-          </div>
-          
-          <div className="btr-input-group">
-            <label className="btr-label">Annual Rent Growth</label>
-            <select
-              name="annualRentGrowth"
-              value={inputs.annualRentGrowth}
-              onChange={handleInputChange}
-              className="btr-input"
-            >
-              <option value={0.02}>2%</option>
-              <option value={0.03}>3%</option>
-              <option value={0.04}>4%</option>
-            </select>
-          </div>
-          
-          <div className="btr-input-group">
-            <label className="btr-label">Home Price Appreciation</label>
-            <select
-              name="homePriceAppreciation"
-              value={inputs.homePriceAppreciation}
-              onChange={handleInputChange}
-              className="btr-input"
-            >
-              <option value={0.02}>2%</option>
-              <option value={0.03}>3%</option>
-              <option value={0.04}>4%</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      
-      {/* Results Dashboard */}
-      <div className="btr-card btr-full-width">
-        <h2 className="btr-section-title">Investment Returns Dashboard</h2>
-        
-        <div className="btr-metrics-grid">
-          <div className="btr-metric btr-metric-blue">
-            <h3 className="btr-metric-title">IRR</h3>
-            <p className="btr-metric-value">
-              {results.returns.irr ? formatPercent(results.returns.irr) : '-'}
-            </p>
-          </div>
-          
-          <div className="btr-metric btr-metric-green">
-            <h3 className="btr-metric-title">Equity Multiple</h3>
-            <p className="btr-metric-value">
-              {results.returns.equityMultiple ? results.returns.equityMultiple.toFixed(2) + 'x' : '-'}
-            </p>
-          </div>
-          
-          <div className="btr-metric btr-metric-purple">
-            <h3 className="btr-metric-title">Cash Yield</h3>
-            <p className="btr-metric-value">
-              {results.returns.averageAnnualCashYield ? formatPercent(results.returns.averageAnnualCashYield / 100) : '-'}
-            </p>
-          </div>
-          
-          <div className="btr-metric btr-metric-orange">
-  <h3 className="btr-metric-title">Total Investment</h3>
-  <p className="btr-metric-value">
-    {results.acquisitionSummary.equityRequired ? formatCurrency(results.acquisitionSummary.equityRequired) : '-'}
-  </p>
-</div>
+        <div className="btr-input-group">
+          <label className="btr-label">3-Bed Market Value</label>
+          <input
+            type="number"
+            name="marketValue3Bed"
+            value={inputs.marketValue3Bed}
+            onChange={handleInputChange}
+            className="btr-input"
+          />
         </div>
         
-        {/* Add display of LP/GP split in the dashboard */}
-        <div className="btr-profit-split-display">
-          <h3 className="btr-profit-split-title">Profit Share Structure</h3>
-          <div className="btr-profit-split-bars">
-            <div className="btr-profit-split-bar">
-              <div 
-                className="btr-profit-split-segment btr-segment-lp" 
-                style={{width: `${inputs.lpSplit * 100}%`}}
-              >
-                LP: {(inputs.lpSplit * 100).toFixed(0)}%
-              </div>
-              <div 
-                className="btr-profit-split-segment btr-segment-gp" 
-                style={{width: `${inputs.gpSplit * 100}%`}}
-              >
-                GP: {(inputs.gpSplit * 100).toFixed(0)}%
-              </div>
-            </div>
-          </div>
-          <p className="btr-note">Distribution after {(inputs.preferredReturn * 100).toFixed(0)}% preferred return</p>
+        <div className="btr-input-group">
+          <label className="btr-label">3-Bed Monthly Rent</label>
+          <input
+            type="number"
+            name="monthlyRent3Bed"
+            value={inputs.monthlyRent3Bed}
+            onChange={handleInputChange}
+            className="btr-input"
+          />
         </div>
-      </div>
-      
-      {/* Portfolio Value Chart */}
-      <div className="btr-card btr-full-width">
-        <h2 className="btr-section-title">Portfolio Value & Equity Over Time</h2>
-        <div className="btr-chart-container">
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart 
-              data={results.portfolioValueChartData} 
-              margin={{ top: 10, right: 30, bottom: 20, left: 30 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis />
-              <Tooltip formatter={(value) => formatCurrency(value)} />
-              <Legend />
-              <Line type="monotone" dataKey="portfolioValue" name="Portfolio Value" stroke="#4F46E5" strokeWidth={2} dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="portfolioCost" name="Acquisition Cost" stroke="#EF4444" strokeWidth={2} dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="portfolioDebt" name="Remaining Debt" stroke="#F59E0B" strokeWidth={2} dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="lpEquity" name="LP Equity" stroke="#10B981" strokeWidth={2} dot={{ r: 4 }} />
-            </LineChart>
-          </ResponsiveContainer>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">4-Bed Acquisition Price</label>
+          <input
+            type="number"
+            name="acquisitionPrice4Bed"
+            value={inputs.acquisitionPrice4Bed}
+            onChange={handleInputChange}
+            className="btr-input"
+          />
         </div>
-      </div>
-      
-      {/* Annual Cash Flow Chart */}
-      <div className="btr-card btr-full-width">
-        <h2 className="btr-section-title">Annual Cash Flow Projection</h2>
-        <div className="btr-chart-container">
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={cashFlowChartData} margin={{ top: 10, right: 30, bottom: 20, left: 30 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis />
-              <Tooltip formatter={(value) => formatCurrency(value)} />
-              <Legend />
-              <Line type="monotone" dataKey="noi" name="NOI" stroke="#4F46E5" strokeWidth={2} />
-              <Line type="monotone" dataKey="debtService" name="Debt Service" stroke="#EF4444" strokeWidth={2} />
-              <Line type="monotone" dataKey="lpDistribution" name="Investor Distribution" stroke="#10B981" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">4-Bed Market Value</label>
+          <input
+            type="number"
+            name="marketValue4Bed"
+            value={inputs.marketValue4Bed}
+            onChange={handleInputChange}
+            className="btr-input"
+          />
         </div>
-      </div>
-      
-      {/* Simplified Cash Flow Details */}
-      <div className="btr-card btr-full-width">
-        <h2 className="btr-section-title">Annual Cash Flow Details</h2>
-        <div className="btr-table-container">
-          <table className="btr-table">
-            <thead>
-              <tr className="btr-table-header">
-                <th className="btr-table-cell">Year</th>
-                <th className="btr-table-cell">NOI</th>
-                <th className="btr-table-cell">Debt Service</th>
-                <th className="btr-table-cell">DSCR</th>
-                <th className="btr-table-cell">Preferred Return</th>
-                <th className="btr-table-cell">LP Distribution</th>
-                <th className="btr-table-cell">GP Distribution</th>
-                <th className="btr-table-cell">Cash Yield</th>
-              </tr>
-            </thead>
-            <tbody>
-              {results.cashFlows.map((year) => (
-                <tr key={year.year} className="btr-table-row">
-                  <td className="btr-table-cell">Year {year.year}</td>
-                  <td className="btr-table-cell">{formatCurrency(year.noi)}</td>
-                  <td className="btr-table-cell">{formatCurrency(year.debtService)}</td>
-                  <td className="btr-table-cell">{year.dscr.toFixed(2)}</td>
-                  <td className="btr-table-cell">{formatCurrency(year.preferredReturnPaid)}</td>
-                  <td className="btr-table-cell">{formatCurrency(year.lpDistribution)}</td>
-                  <td className="btr-table-cell">{formatCurrency(year.gpDistribution)}</td>
-                  <td className="btr-table-cell">{year.cashYield.toFixed(2)}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">4-Bed Monthly Rent</label>
+          <input
+            type="number"
+            name="monthlyRent4Bed"
+            value={inputs.monthlyRent4Bed}
+            onChange={handleInputChange}
+            className="btr-input"
+          />
         </div>
-      </div>
-      
-      {/* Exit Summary */}
-      <div className="btr-card btr-full-width">
-        <h2 className="btr-section-title">Exit Summary</h2>
-        <div className="btr-table-container">
-          <table className="btr-table">
-            <tbody>
-              <tr className="btr-table-row">
-                <td className="btr-table-cell">Gross Sale Proceeds</td>
-                <td className="btr-table-cell">{formatCurrency(results.exitSummary.grossSaleProceeds || 0)}</td>
-              </tr>
-              <tr className="btr-table-row">
-                <td className="btr-table-cell">Selling Costs</td>
-                <td className="btr-table-cell">{formatCurrency(results.exitSummary.sellingCosts || 0)}</td>
-              </tr>
-              <tr className="btr-table-row">
-                <td className="btr-table-cell">Net Sale Proceeds</td>
-                <td className="btr-table-cell">{formatCurrency(results.exitSummary.netSaleProceeds || 0)}</td>
-              </tr>
-              <tr className="btr-table-row">
-                <td className="btr-table-cell">Remaining Loan Balance</td>
-                <td className="btr-table-cell">{formatCurrency(results.exitSummary.remainingLoanBalance || 0)}</td>
-              </tr>
-              <tr className="btr-table-row">
-                <td className="btr-table-cell">Net Proceeds After Debt</td>
-                <td className="btr-table-cell">{formatCurrency(results.exitSummary.netProceedsAfterDebt || 0)}</td>
-              </tr>
-              <tr className="btr-table-row">
-                <td className="btr-table-cell">Return of Capital</td>
-                <td className="btr-table-cell">{formatCurrency(results.exitSummary.returnOfCapital || 0)}</td>
-              </tr>
-              <tr className="btr-table-row">
-                <td className="btr-table-cell">Preferred Return</td>
-                <td className="btr-table-cell">{formatCurrency(results.exitSummary.preferredReturnAtExit || 0)}</td>
-              </tr>
-              <tr className="btr-table-row">
-                <td className="btr-table-cell">LP Profit Share</td>
-                <td className="btr-table-cell">{formatCurrency(results.exitSummary.lpProfit || 0)}</td>
-              </tr>
-              <tr className="btr-table-row">
-                <td className="btr-table-cell">GP Profit Share</td>
-                <td className="btr-table-cell">{formatCurrency(results.exitSummary.gpProfit || 0)}</td>
-              </tr>
-              <tr className="btr-table-row btr-row-highlight">
-                <td className="btr-table-cell">Total to LPs</td>
-                <td className="btr-table-cell">{formatCurrency(results.exitSummary.totalToLPs || 0)}</td>
-              </tr>
-            </tbody>
-          </table>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">Annual Rent Growth</label>
+          <select
+            name="annualRentGrowth"
+            value={inputs.annualRentGrowth}
+            onChange={handleInputChange}
+            className="btr-input"
+          >
+            <option value={0.02}>2%</option>
+            <option value={0.03}>3%</option>
+            <option value={0.04}>4%</option>
+          </select>
+        </div>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">Home Price Appreciation</label>
+          <select
+            name="homePriceAppreciation"
+            value={inputs.homePriceAppreciation}
+            onChange={handleInputChange}
+            className="btr-input"
+          >
+            <option value={0.02}>2%</option>
+            <option value={0.03}>3%</option>
+            <option value={0.04}>4%</option>
+          </select>
         </div>
       </div>
     </div>
-  );
+    
+    {/* Results Dashboard */}
+    <div className="btr-card btr-full-width">
+      <h2 className="btr-section-title">Investment Returns Dashboard</h2>
+      
+      <div className="btr-metrics-grid">
+        <div className="btr-metric btr-metric-blue">
+          <h3 className="btr-metric-title">IRR</h3>
+          <p className="btr-metric-value">
+            {results.returns.irr ? formatPercent(results.returns.irr) : '-'}
+          </p>
+        </div>
+        
+        <div className="btr-metric btr-metric-green">
+          <h3 className="btr-metric-title">Equity Multiple</h3>
+          <p className="btr-metric-value">
+            {results.returns.equityMultiple ? results.returns.equityMultiple.toFixed(2) + 'x' : '-'}
+          </p>
+        </div>
+        
+        <div className="btr-metric btr-metric-purple">
+          <h3 className="btr-metric-title">Cash Yield</h3>
+          <p className="btr-metric-value">
+            {results.returns.averageAnnualCashYield ? formatPercent(results.returns.averageAnnualCashYield / 100) : '-'}
+          </p>
+        </div>
+        
+        <div className="btr-metric btr-metric-orange">
+          <h3 className="btr-metric-title">Total Investment</h3>
+          <p className="btr-metric-value">
+            {results.acquisitionSummary.equityRequired ? formatCurrency(results.acquisitionSummary.equityRequired) : '-'}
+          </p>
+        </div>
+      </div>
+      
+      {/* LP/GP split visualization */}
+      <div className="btr-profit-split-display">
+        <h3 className="btr-profit-split-title">Profit Share Structure</h3>
+        <div className="btr-profit-split-bars">
+          <div className="btr-profit-split-bar">
+            <div 
+              className="btr-segment-lp" 
+              style={{width: `${inputs.lpSplit * 100}%`}}
+            >
+              LP: {(inputs.lpSplit * 100).toFixed(0)}%
+            </div>
+            <div 
+              className="btr-segment-gp" 
+              style={{width: `${inputs.gpSplit * 100}%`}}
+            >
+              GP: {(inputs.gpSplit * 100).toFixed(0)}%
+            </div>
+          </div>
+        </div>
+        <p className="btr-note">Distribution after {(inputs.preferredReturn * 100).toFixed(0)}% preferred return</p>
+      </div>
+    </div>
+    
+
+// Portfolio Value Chart 
+<div className="btr-chart-container">
+  <ResponsiveContainer width="100%" height={300}>
+    <LineChart 
+      data={results.portfolioValueChartData} 
+      margin={{ top: 10, right: 30, bottom: 20, left: 30 }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis 
+        dataKey="year" 
+        tick={{ fill: isDarkMode ? "#f9fafb" : "#1f2937" }} 
+      />
+      <YAxis 
+        tick={{ fill: isDarkMode ? "#f9fafb" : "#1f2937" }}
+        tickFormatter={(value) => formatCurrency(value, true)} // true for short format
+      />
+      <Tooltip 
+        formatter={(value) => formatCurrency(value)} 
+        contentStyle={{ 
+          backgroundColor: isDarkMode ? '#2f3c4a' : '#ffffff',
+          borderColor: isDarkMode ? '#5aB6BF' : '#d1d5db',
+          color: isDarkMode ? '#f9fafb' : '#1f2937'
+        }}
+        labelStyle={{
+          color: isDarkMode ? '#f9fafb' : '#1f2937'
+        }}
+        itemStyle={{
+          color: isDarkMode ? '#f9fafb' : '#1f2937'
+        }}
+      />
+      <Legend 
+        wrapperStyle={{
+          color: isDarkMode ? '#f9fafb' : '#1f2937'
+        }}
+      />
+      <Line type="monotone" dataKey="portfolioValue" name="Portfolio Value" stroke={chartColors.portfolioValue} strokeWidth={2} dot={{ r: 4 }} />
+      <Line type="monotone" dataKey="portfolioCost" name="Acquisition Cost" stroke={chartColors.portfolioCost} strokeWidth={2} dot={{ r: 4 }} />
+      <Line type="monotone" dataKey="portfolioDebt" name="Remaining Debt" stroke={chartColors.portfolioDebt} strokeWidth={2} dot={{ r: 4 }} />
+      <Line type="monotone" dataKey="lpEquity" name="LP Equity" stroke={chartColors.lpEquity} strokeWidth={2} dot={{ r: 4 }} />
+    </LineChart>
+  </ResponsiveContainer>
+</div>
+    
+    // Annual Cash Flow Chart
+<div className="btr-chart-container">
+  <ResponsiveContainer width="100%" height={300}>
+    <LineChart 
+      data={cashFlowChartData} 
+      margin={{ top: 10, right: 30, bottom: 20, left: 30 }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis 
+        dataKey="year" 
+        tick={{ fill: isDarkMode ? "#f9fafb" : "#1f2937" }} 
+      />
+      <YAxis 
+        tick={{ fill: isDarkMode ? "#f9fafb" : "#1f2937" }}
+        tickFormatter={(value) => formatCurrency(value, true)} // true for short format
+      />
+      <Tooltip 
+        formatter={(value) => formatCurrency(value)} 
+        contentStyle={{ 
+          backgroundColor: isDarkMode ? '#2f3c4a' : '#ffffff',
+          borderColor: isDarkMode ? '#5aB6BF' : '#d1d5db',
+          color: isDarkMode ? '#f9fafb' : '#1f2937'
+        }}
+        labelStyle={{
+          color: isDarkMode ? '#f9fafb' : '#1f2937'
+        }}
+        itemStyle={{
+          color: isDarkMode ? '#f9fafb' : '#1f2937'
+        }}
+      />
+      <Legend 
+        wrapperStyle={{
+          color: isDarkMode ? '#f9fafb' : '#1f2937'
+        }}
+      />
+      <Line type="monotone" dataKey="noi" name="NOI" stroke={chartColors.noi} strokeWidth={2} />
+      <Line type="monotone" dataKey="debtService" name="Debt Service" stroke={chartColors.debtService} strokeWidth={2} />
+      <Line type="monotone" dataKey="lpDistribution" name="Investor Distribution" stroke={chartColors.lpDistribution} strokeWidth={2} />
+    </LineChart>
+  </ResponsiveContainer>
+</div>
+    
+    {/* Cash Flow Details */}
+    <div className="btr-card btr-full-width">
+      <h2 className="btr-section-title">Annual Cash Flow Details</h2>
+      <div className="btr-table-container">
+        <table className="btr-table">
+          <thead>
+            <tr className="btr-table-header">
+              <th className="btr-table-cell">Year</th>
+              <th className="btr-table-cell">NOI</th>
+              <th className="btr-table-cell">Debt Service</th>
+              <th className="btr-table-cell">DSCR</th>
+              <th className="btr-table-cell">Preferred Return</th>
+              <th className="btr-table-cell">LP Distribution</th>
+              <th className="btr-table-cell">GP Distribution</th>
+              <th className="btr-table-cell">Cash Yield</th>
+            </tr>
+          </thead>
+          <tbody>
+            {results.cashFlows.map((year) => (
+              <tr key={year.year} className="btr-table-row">
+                <td className="btr-table-cell">Year {year.year}</td>
+                <td className="btr-table-cell">{formatCurrency(year.noi)}</td>
+                <td className="btr-table-cell">{formatCurrency(year.debtService)}</td>
+                <td className="btr-table-cell">{year.dscr.toFixed(2)}</td>
+                <td className="btr-table-cell">{formatCurrency(year.preferredReturnPaid)}</td>
+                <td className="btr-table-cell">{formatCurrency(year.lpDistribution)}</td>
+                <td className="btr-table-cell">{formatCurrency(year.gpDistribution)}</td>
+                <td className="btr-table-cell">{year.cashYield.toFixed(2)}%</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    {/* Exit Summary */}
+    <div className="btr-card btr-full-width">
+      <h2 className="btr-section-title">Exit Summary</h2>
+      <div className="btr-table-container">
+        <table className="btr-table">
+          <tbody>
+            <tr className="btr-table-row">
+              <td className="btr-table-cell">Gross Sale Proceeds</td>
+              <td className="btr-table-cell">{formatCurrency(results.exitSummary.grossSaleProceeds || 0)}</td>
+            </tr>
+            <tr className="btr-table-row">
+              <td className="btr-table-cell">Selling Costs</td>
+              <td className="btr-table-cell">{formatCurrency(results.exitSummary.sellingCosts || 0)}</td>
+            </tr>
+            <tr className="btr-table-row">
+              <td className="btr-table-cell">Net Sale Proceeds</td>
+              <td className="btr-table-cell">{formatCurrency(results.exitSummary.netSaleProceeds || 0)}</td>
+            </tr>
+            <tr className="btr-table-row">
+              <td className="btr-table-cell">Remaining Loan Balance</td>
+              <td className="btr-table-cell">{formatCurrency(results.exitSummary.remainingLoanBalance || 0)}</td>
+            </tr>
+            <tr className="btr-table-row">
+              <td className="btr-table-cell">Net Proceeds After Debt</td>
+              <td className="btr-table-cell">{formatCurrency(results.exitSummary.netProceedsAfterDebt || 0)}</td>
+            </tr>
+            <tr className="btr-table-row">
+              <td className="btr-table-cell">Return of Capital</td>
+              <td className="btr-table-cell">{formatCurrency(results.exitSummary.returnOfCapital || 0)}</td>
+            </tr>
+            <tr className="btr-table-row">
+              <td className="btr-table-cell">Preferred Return</td>
+              <td className="btr-table-cell">{formatCurrency(results.exitSummary.preferredReturnAtExit || 0)}</td>
+            </tr>
+            <tr className="btr-table-row">
+              <td className="btr-table-cell">LP Profit Share</td>
+              <td className="btr-table-cell">{formatCurrency(results.exitSummary.lpProfit || 0)}</td>
+            </tr>
+            <tr className="btr-table-row">
+              <td className="btr-table-cell">GP Profit Share</td>
+              <td className="btr-table-cell">{formatCurrency(results.exitSummary.gpProfit || 0)}</td>
+            </tr>
+            <tr className="btr-row-highlight">
+              <td className="btr-table-cell">Total to LPs</td>
+              <td className="btr-table-cell">{formatCurrency(results.exitSummary.totalToLPs || 0)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    {/* Footer with branding */}
+    <div className="btr-card btr-full-width" style={{ textAlign: 'center', marginTop: '2rem' }}>
+      <p>USDV BTR Opportunity Fund</p>
+      <p className="btr-note">A Wealth-Building Strategy You Can't Afford to Miss: 2,000 BTR Homes, 2 Phases, First-Mover Advantage.</p>
+    </div>
+  </div>
+);
 };
 
 export default BTRFinancialModelPrototype;

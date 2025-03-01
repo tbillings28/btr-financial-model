@@ -1,12 +1,13 @@
-/* BTR Financial Model Styling */
+/* BTR Financial Model Styling - USDV Branding */
 
 /* Main container */
 .btr-container {
   padding: 1.5rem;
   max-width: 72rem;
   margin: 0 auto;
-  background-color: #f9fafb;
+  background-color: #1f2937; /* Dark background from presentation */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #f9fafb;
 }
 
 /* Title */
@@ -15,7 +16,9 @@
   font-weight: 700;
   margin-bottom: 1.5rem;
   text-align: center;
-  color: #111827;
+  color: #f9fafb;
+  border-bottom: 2px solid #5aB6BF; /* Teal accent line */
+  padding-bottom: 1rem;
 }
 
 /* Grid layout */
@@ -34,11 +37,12 @@
 
 /* Card styles */
 .btr-card {
-  background-color: white;
+  background-color: #2f3c4a; /* Darker card background */
   padding: 1.5rem;
   border-radius: 0.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   margin-bottom: 2rem;
+  border-top: 4px solid #5aB6BF; /* Teal accent border */
 }
 
 .btr-full-width {
@@ -50,7 +54,9 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: #111827;
+  color: #f9fafb;
+  border-bottom: 1px solid #5aB6BF; /* Teal accent underline */
+  padding-bottom: 0.5rem;
 }
 
 /* Input groups */
@@ -63,26 +69,28 @@
   font-size: 0.875rem;
   font-weight: 500;
   margin-bottom: 0.25rem;
-  color: #4b5563;
+  color: #d1d5db;
 }
 
 .btr-input {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #d1d5db;
+  background-color: #1f2937;
+  border: 1px solid #4b5563;
   border-radius: 0.25rem;
   font-size: 1rem;
+  color: #f9fafb;
 }
 
 .btr-input:focus {
   outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  border-color: #5aB6BF;
+  box-shadow: 0 0 0 3px rgba(90, 182, 191, 0.2);
 }
 
 .btr-note {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: #9ca3af;
   margin-top: 0.25rem;
 }
 
@@ -100,7 +108,7 @@
   }
 }
 
-/* Metric cards */
+/* Metric cards - using the presentation's teal color */
 .btr-metric {
   padding: 1rem;
   border-radius: 0.5rem;
@@ -117,39 +125,57 @@
   font-weight: 700;
 }
 
-/* Metric colors */
+/* Metric colors - all using the USDV teal palette */
 .btr-metric-blue {
-  background-color: #eff6ff;
+  background-color: #5aB6BF;
+}
+.btr-metric-blue .btr-metric-title {
+  color: #1f2937;
 }
 .btr-metric-blue .btr-metric-value {
-  color: #2563eb;
+  color: #1f2937;
 }
 
 .btr-metric-green {
-  background-color: #ecfdf5;
+  background-color: #5aB6BF;
+  opacity: 0.9;
+}
+.btr-metric-green .btr-metric-title {
+  color: #1f2937;
 }
 .btr-metric-green .btr-metric-value {
-  color: #10b981;
+  color: #1f2937;
 }
 
 .btr-metric-purple {
-  background-color: #f5f3ff;
+  background-color: #5aB6BF;
+  opacity: 0.8;
+}
+.btr-metric-purple .btr-metric-title {
+  color: #1f2937;
 }
 .btr-metric-purple .btr-metric-value {
-  color: #8b5cf6;
+  color: #1f2937;
 }
 
 .btr-metric-orange {
-  background-color: #fff7ed;
+  background-color: #5aB6BF;
+  opacity: 0.7;
+}
+.btr-metric-orange .btr-metric-title {
+  color: #1f2937;
 }
 .btr-metric-orange .btr-metric-value {
-  color: #f97316;
+  color: #1f2937;
 }
 
 /* Chart container */
 .btr-chart-container {
   height: 300px;
   width: 100%;
+  background-color: #2f3c4a;
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 
 /* Table styling */
@@ -163,30 +189,31 @@
 }
 
 .btr-table-header {
-  background-color: #f3f4f6;
+  background-color: #5aB6BF;
+  color: #1f2937;
 }
 
 .btr-table-cell {
   padding: 0.5rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #4b5563;
 }
 
 .btr-table-row:nth-child(even) {
-  background-color: #f9fafb;
+  background-color: #374151;
 }
 
 /* New styles for the LP/GP split display */
 .btr-profit-split-display {
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #5aB6BF;
 }
 
 .btr-profit-split-title {
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
-  color: #111827;
+  color: #f9fafb;
 }
 
 .btr-profit-split-bars {
@@ -206,101 +233,81 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: #1f2937;
   font-weight: 500;
   font-size: 0.875rem;
   transition: width 0.3s ease;
 }
 
 .btr-segment-lp {
-  background-color: #3b82f6;
+  background-color: #5aB6BF; /* LP segment color */
 }
 
 .btr-segment-gp {
-  background-color: #f97316;
+  background-color: #3f8088; /* GP segment color - darker teal */
 }
 
 /* Exit summary highlighting */
 .btr-row-highlight {
   font-weight: bold;
-  background-color: #f0f9ff !important;
+  background-color: #5aB6BF !important;
+  color: #1f2937;
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .btr-container {
-    background-color: #1f2937;
-    color: #f9fafb;
-  }
-  
-  .btr-card {
-    background-color: #374151;
-  }
-  
-  .btr-section-title,
-  .btr-profit-split-title,
-  .btr-title {
-    color: #f9fafb;
-  }
-  
-  .btr-label {
-    color: #d1d5db;
-  }
-  
-  .btr-input {
-    background-color: #4b5563;
-    border-color: #6b7280;
-    color: #f9fafb;
-  }
-  
-  .btr-note {
-    color: #9ca3af;
-  }
-  
-  .btr-table-header {
-    background-color: #4b5563;
-  }
-  
-  .btr-table-cell {
-    border-color: #4b5563;
-  }
-  
-  .btr-table-row:nth-child(even) {
-    background-color: #374151;
-  }
-  
-  .btr-row-highlight {
-    background-color: #1e3a8a !important;
-  }
-  
-  /* Adjust metric card colors for dark mode */
-  .btr-metric-blue {
-    background-color: #1e3a8a;
-  }
-  .btr-metric-blue .btr-metric-value {
-    color: #93c5fd;
-  }
-  
-  .btr-metric-green {
-    background-color: #064e3b;
-  }
-  .btr-metric-green .btr-metric-value {
-    color: #6ee7b7;
-  }
-  
-  .btr-metric-purple {
-    background-color: #4c1d95;
-  }
-  .btr-metric-purple .btr-metric-value {
-    color: #c4b5fd;
-  }
-  
-  .btr-metric-orange {
-    background-color: #7c2d12;
-  }
-  .btr-metric-orange .btr-metric-value {
-    color: #fdba74;
-  }
+/* Custom theme toggle button */
+.btr-theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #5aB6BF;
+  color: #1f2937;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btr-theme-toggle:hover {
+  background-color: #3f8088;
+}
+
+/* Light mode theme */
+.btr-light-mode {
+  background-color: #f9fafb;
+  color: #1f2937;
+}
+
+.btr-light-mode .btr-title {
+  color: #1f2937;
+}
+
+.btr-light-mode .btr-card {
+  background-color: white;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.btr-light-mode .btr-section-title {
+  color: #1f2937;
+}
+
+.btr-light-mode .btr-label {
+  color: #4b5563;
+}
+
+.btr-light-mode .btr-input {
+  background-color: white;
+  border-color: #d1d5db;
+  color: #1f2937;
+}
+
+.btr-light-mode .btr-table-cell {
+  border-color: #e5e7eb;
+}
+
+.btr-light-mode .btr-table-row:nth-child(even) {
+  background-color: #f9fafb;
 }
 
 /* Print styles */
@@ -335,4 +342,78 @@
   .btr-card.btr-full-width {
     page-break-after: always;
   }
+  
+  .btr-theme-toggle {
+    display: none;
+  }
+}/* This is a CSS update that focuses specifically on fixing the chart contrast in light mode */
+
+/* Chart container with better background contrast in light mode */
+.btr-chart-container {
+  height: 300px;
+  width: 100%;
+  background-color: #2f3c4a; /* Dark background for dark mode */
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Light mode chart container with appropriate background */
+.btr-light-mode .btr-chart-container {
+  background-color: #f5f7fa; /* Light gray background for light mode */
+  border: 1px solid #e2e8f0;
+}
+
+/* Fix for axis text in both modes */
+.recharts-cartesian-axis-tick-value {
+  fill: #f9fafb; /* Light text for dark mode */
+}
+
+.btr-light-mode .recharts-cartesian-axis-tick-value {
+  fill: #1f2937; /* Dark text for light mode */
+}
+
+/* Fix for CartesianGrid in both modes */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #f9fafb;
+  stroke-opacity: 0.2;
+}
+
+.btr-light-mode .recharts-cartesian-grid-horizontal line,
+.btr-light-mode .recharts-cartesian-grid-vertical line {
+  stroke: #1f2937;
+  stroke-opacity: 0.2;
+}
+
+/* Fix for legend text in both modes */
+.recharts-legend-item-text {
+  color: #f9fafb !important; /* Light text for dark mode */
+}
+
+.btr-light-mode .recharts-legend-item-text {
+  color: #1f2937 !important; /* Dark text for light mode */
+}
+
+/* Make sure tooltip has good contrast in both modes */
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: #2f3c4a !important;
+  border-color: #5aB6BF !important;
+  color: #f9fafb !important;
+}
+
+.btr-light-mode .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: #ffffff !important;
+  border-color: #d1d5db !important;
+  color: #1f2937 !important;
+}
+
+/* Fix label text in tooltip for both modes */
+.recharts-tooltip-item-name,
+.recharts-tooltip-item-value {
+  color: #f9fafb !important;
+}
+
+.btr-light-mode .recharts-tooltip-item-name,
+.btr-light-mode .recharts-tooltip-item-value {
+  color: #1f2937 !important;
 }
