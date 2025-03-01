@@ -1,0 +1,176 @@
+/* BTR Financial Model Styling */
+
+/* Main container */
+.btr-container {
+    padding: 1.5rem;
+    max-width: 72rem;
+    margin: 0 auto;
+    background-color: #f9fafb;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  
+  /* Title */
+  .btr-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #111827;
+  }
+  
+  /* Grid layout */
+  .btr-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .btr-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  /* Card styles */
+  .btr-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-bottom: 2rem;
+  }
+  
+  .btr-full-width {
+    grid-column: 1 / -1;
+  }
+  
+  /* Section titles */
+  .btr-section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #111827;
+  }
+  
+  /* Input groups */
+  .btr-input-group {
+    margin-bottom: 1rem;
+  }
+  
+  .btr-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    color: #4b5563;
+  }
+  
+  .btr-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+  }
+  
+  .btr-input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  }
+  
+  .btr-note {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+  }
+  
+  /* Metrics grid */
+  .btr-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .btr-metrics-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  /* Metric cards */
+  .btr-metric {
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+  
+  .btr-metric-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .btr-metric-value {
+    font-size: 1.875rem;
+    font-weight: 700;
+  }
+  
+  /* Metric colors */
+  .btr-metric-blue {
+    background-color: #eff6ff;
+  }
+  .btr-metric-blue .btr-metric-value {
+    color: #2563eb;
+  }
+  
+  .btr-metric-green {
+    background-color: #ecfdf5;
+  }
+  .btr-metric-green .btr-metric-value {
+    color: #10b981;
+  }
+  
+  .btr-metric-purple {
+    background-color: #f5f3ff;
+  }
+  .btr-metric-purple .btr-metric-value {
+    color: #8b5cf6;
+  }
+  
+  .btr-metric-orange {
+    background-color: #fff7ed;
+  }
+  .btr-metric-orange .btr-metric-value {
+    color: #f97316;
+  }
+  
+  /* Chart container */
+  .btr-chart-container {
+    height: 300px;
+    width: 100%;
+  }
+  
+  /* Table styling */
+  .btr-table-container {
+    overflow-x: auto;
+  }
+  
+  .btr-table {
+    min-width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .btr-table-header {
+    background-color: #f3f4f6;
+  }
+  
+  .btr-table-cell {
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .btr-table-row:nth-child(even) {
+    background-color: #f9fafb;
+  }
