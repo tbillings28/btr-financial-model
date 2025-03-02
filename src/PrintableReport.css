@@ -1,0 +1,493 @@
+/* PrintableReport.css */
+.printable-report {
+  font-family: 'Arial', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: #fff;
+  color: #333;
+}
+
+.report-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.report-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.report-subtitle {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.report-section {
+  margin-bottom: 2.5rem;
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+  clear: both;
+}
+
+h2 {
+  color: #2c3e50;
+  font-size: 1.75rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+h3 {
+  color: #3498db;
+  font-size: 1.35rem;
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.section-divider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 0.5rem 0 1.5rem 0;
+}
+
+.section-header {
+  margin-bottom: 1.5rem;
+}
+
+.section-line {
+  height: 2px;
+  background-color: #eee;
+  margin-top: 10px;
+}
+
+/* Key Metrics */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.metric-card {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.metric-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* Portfolio Value Chart */
+.chart-container {
+  height: 350px;
+  margin-bottom: 2rem;
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.chart-title {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* Cash Flow Table */
+.cash-flow-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
+.cash-flow-table th,
+.cash-flow-table td {
+  padding: 0.75rem;
+  text-align: right;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.cash-flow-table th:first-child,
+.cash-flow-table td:first-child {
+  text-align: left;
+}
+
+.cash-flow-table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.summary-row {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+/* Exit Strategy */
+.exit-strategy-container {
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.exit-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.exit-detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.detail-label {
+  font-weight: bold;
+}
+
+/* Cost breakdown */
+.cost-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.cost-chart {
+  flex: 1;
+  min-width: 350px;
+}
+
+.cost-details {
+  flex: 1;
+  min-width: 350px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+/* Operating Expenses */
+.expenses-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.expenses-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.expenses-table td:last-child {
+  text-align: right;
+  font-weight: bold;
+}
+
+/* Report footer */
+.report-footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.footer-line {
+  height: 1px;
+  background-color: #e0e0e0;
+  margin-bottom: 1rem;
+}
+
+/* Grid Container */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.single-grid {
+  grid-template-columns: 1fr !important;
+}
+
+.grid-item {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.total-row {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Full width tables */
+.full-width-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 1200px; /* Wider for landscape orientation */
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.printable-report-container {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  color: #333 !important;
+}
+
+/* Button styling */
+.print-controls {
+  background-color: #333;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 5px 5px 0 0;
+}
+
+.print-button, .download-button, .close-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  font-size: 16px;
+  min-width: 150px;
+  margin: 0 5px;
+}
+
+.print-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.print-button:hover {
+  background-color: #45a049;
+}
+
+.download-button {
+  background-color: #ff9800;
+  color: white;
+}
+
+.download-button:hover {
+  background-color: #e68a00;
+}
+
+.close-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.close-button:hover {
+  background-color: #d32f2f;
+}
+
+/* Main content container */
+.report-content {
+  padding: 40px;
+  background-color: white;
+  color: #333 !important;
+  min-width: 1000px; /* Ensure there's enough width for all content */
+}
+
+/* Print styles */
+@media print {
+  @page {
+    size: landscape;
+    margin: 1cm;
+  }
+  
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  .print-controls {
+    display: none;
+  }
+  
+  .printable-report-container {
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    width: 100%;
+  }
+  
+  .report-content {
+    padding: 0.5cm;
+    min-width: unset;
+  }
+  
+  .report-section {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-bottom: 30px;
+  }
+  
+  table {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  .grid-container {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  /* Force black text when printing */
+  * {
+    color: black !important;
+  }
+  
+  /* Specific table styles for printing */
+  th, td {
+    padding: 8px;
+    font-size: 12px;
+  }
+  
+  .chart-container {
+    max-height: 250px;
+    height: 250px;
+  }
+  
+  /* Adjust font sizes for printing */
+  .report-header h1 {
+    font-size: 24px;
+  }
+  
+  .report-section h2 {
+    font-size: 20px;
+  }
+  
+  .report-section h3 {
+    font-size: 16px;
+  }
+}
+
+/* Chart styling fixes */
+.recharts-default-tooltip {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid #ccc !important;
+  color: #333 !important;
+  padding: 10px !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+}
+
+.recharts-tooltip-item-name,
+.recharts-tooltip-item-value {
+  color: #333 !important;
+}
+
+.recharts-pie-label-text {
+  font-size: 13px !important;
+  fill: #333 !important;
+  font-weight: bold !important;
+}
+
+.recharts-sector {
+  stroke: white;
+  stroke-width: 2;
+}
+
+.recharts-cartesian-axis-tick-value {
+  font-size: 12px !important;
+  fill: #333 !important;
+}
+
+.recharts-legend-item-text {
+  font-size: 14px !important;
+  color: #333 !important;
+}
+
+/* Ensure strong light mode for charts */
+.light-mode-forced .recharts-wrapper,
+.light-mode-forced .recharts-surface,
+.light-mode-forced .recharts-layer,
+.light-mode-forced .recharts-legend-item-text,
+.light-mode-forced .recharts-tooltip-wrapper,
+.light-mode-forced .recharts-default-tooltip {
+  color: #333 !important;
+  fill: #333 !important;
+}
+
+/* Fix for pie chart labels */
+.pie-chart-container {
+  position: relative;
+}
+
+/* Move legends to better position */
+.recharts-legend-wrapper {
+  padding: 10px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 4px !important;
+  border: 1px solid #eee !important;
+}

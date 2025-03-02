@@ -3,51 +3,60 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 // Add explicit styling for deployment environments
 import './BTRFinancialModel.css'; // Make sure this points to the updated CSS file
+import ReportButton from './ReportButton';
 
 const BTRFinancialModelPrototype = () => {
   // Add theme state
   const [isDarkMode, setIsDarkMode] = useState(true); // Default to dark mode to match investor presentation
   
-  // State for input assumptions (keeping your original code)
-  const [inputs, setInputs] = useState({
-    // Fund Structure
-    phase1Homes: 500,
-    phase1Bed3: 250,
-    phase1Bed4: 250,
-    preferredReturn: 0.08,
-    lpSplit: 0.80,
-    gpSplit: 0.20,
-    
-    // Financing
-    loanToValue: 0.60,
-    interestRate: 0.055,
-    interestOnly: true,
-    interestOnlyPeriod: 10,
-    
-    // Appreciation & Growth
-    homePriceAppreciation: 0.03,
-    
-    // Property - 3 Bed
-    acquisitionPrice3Bed: 240000,
-    marketValue3Bed: 310000,
-    monthlyRent3Bed: 2100,
-    
-    // Property - 4 Bed
-    acquisitionPrice4Bed: 311695,
-    marketValue4Bed: 360000,
-    monthlyRent4Bed: 2400,
-    
-    // Operating
-    annualRentGrowth: 0.03,
-    vacancyRate: 0.05,
-    
-    // Exit
-    holdPeriodYears: 7,
-    exitStrategy: "portfolio",
-    portfolioExitCapRate: 0.055,
-    brokerageFee: 0.05,
-    individualSalesPremium: 0.05
-  });
+// Find your existing useState declaration for inputs and replace it with this:
+const [inputs, setInputs] = useState({
+  // Fund Structure
+  phase1Homes: 500,
+  phase1Bed3: 250,
+  phase1Bed4: 250,
+  preferredReturn: 0.08,
+  lpSplit: 0.80,
+  gpSplit: 0.20,
+  
+  // Financing
+  loanToValue: 0.60,
+  interestRate: 0.055,
+  interestOnly: true,
+  interestOnlyPeriod: 10,
+  
+  // Appreciation & Growth
+  homePriceAppreciation: 0.03,
+  
+  // Property - 3 Bed
+  acquisitionPrice3Bed: 240000,
+  marketValue3Bed: 310000,
+  monthlyRent3Bed: 2100,
+  
+  // Property - 4 Bed
+  acquisitionPrice4Bed: 311695,
+  marketValue4Bed: 360000,
+  monthlyRent4Bed: 2400,
+  
+  // Operating
+  annualRentGrowth: 0.03,
+  vacancyRate: 0.05,
+  
+  // New Operating Expense inputs
+  propertyManagementFee: 0.08, // 8% of rental income
+  maintenanceCost: 0.05,       // 5% of rental income
+  propertyTaxRate: 0.01,       // 1% of property value
+  insuranceCostPerHome: 1200,  // $1,200 per home annually
+  hoaFeesPerHome: 0,           // $0 per home annually
+  otherExpensesPerHome: 0,     // $0 per home annually
+  
+  // Exit
+  holdPeriodYears: 7,
+  exitStrategy: "portfolio",
+  portfolioExitCapRate: 0.055,
+  brokerageFee: 0.05,
+  individualSalesPremium: 0.05
+});
   
   // State for calculated results
   const [results, setResults] = useState({
@@ -125,6 +134,22 @@ const BTRFinancialModelPrototype = () => {
     return mid; // Return our best approximation
   };
   
+  // Calculate remaining loan balance function
+  const calculateRemainingLoanBalance = (principal, rate, termYears, elapsedYears) => {
+    const monthlyRate = rate / 12;
+    const totalPayments = termYears * 12;
+    const monthlyPayment = (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -totalPayments));
+    
+    let balance = principal;
+    for (let i = 0; i < elapsedYears * 12; i++) {
+      const interestPayment = balance * monthlyRate;
+      const principalPayment = monthlyPayment - interestPayment;
+      balance -= principalPayment;
+    }
+    
+    return Math.max(0, balance);
+  };
+  
   // Calculate results whenever inputs change
   useEffect(() => {
     // Main calculation function
@@ -156,6 +181,11 @@ const BTRFinancialModelPrototype = () => {
       let unpaidPreferredReturn = 0;
       let cashFlows = [];
       
+      // Calculate total property value
+      const initialPropertyValue3Bed = inputs.marketValue3Bed * inputs.phase1Bed3;
+      const initialPropertyValue4Bed = inputs.marketValue4Bed * inputs.phase1Bed4;
+      const totalPropertyValue = initialPropertyValue3Bed + initialPropertyValue4Bed;
+      
       // Generate annual cash flows
       for (let year = 1; year <= inputs.holdPeriodYears; year++) {
         // Calculate rental income with growth
@@ -168,11 +198,26 @@ const BTRFinancialModelPrototype = () => {
         // Calculate property values for this year
         const propertyValue3Bed = inputs.marketValue3Bed * Math.pow(1 + inputs.homePriceAppreciation, year - 1);
         const propertyValue4Bed = inputs.marketValue4Bed * Math.pow(1 + inputs.homePriceAppreciation, year - 1);
-        const totalPropertyValue = (propertyValue3Bed * inputs.phase1Bed3) + 
-                                   (propertyValue4Bed * inputs.phase1Bed4);
+        const totalPropertyValueThisYear = (propertyValue3Bed * inputs.phase1Bed3) + 
+                                 (propertyValue4Bed * inputs.phase1Bed4);
         
-        // Simplified operating expenses (30% of revenue)
-        const totalOperatingExpenses = effectiveRentalIncome * 0.3;
+       // Find this part in your calculateResults function:
+// const totalOperatingExpenses = effectiveRentalIncome * 0.3;
+
+// Replace it with this code:
+const calculateOperatingExpenses = (rentalIncome, propertyValue) => {
+  const propertyManagement = rentalIncome * inputs.propertyManagementFee;
+  const maintenance = rentalIncome * inputs.maintenanceCost;
+  const propertyTaxes = propertyValue * inputs.propertyTaxRate;
+  const insurance = inputs.phase1Homes * inputs.insuranceCostPerHome;
+  const hoaFees = inputs.phase1Homes * inputs.hoaFeesPerHome;
+  const otherExpenses = inputs.phase1Homes * inputs.otherExpensesPerHome;
+  
+  return propertyManagement + maintenance + propertyTaxes + insurance + hoaFees + otherExpenses;
+};
+
+const totalPropertyValue = (propertyValue3Bed * inputs.phase1Bed3) + (propertyValue4Bed * inputs.phase1Bed4);
+const totalOperatingExpenses = calculateOperatingExpenses(effectiveRentalIncome, totalPropertyValue);
         
         // Calculate NOI
         const noi = effectiveRentalIncome - totalOperatingExpenses;
@@ -218,7 +263,9 @@ const BTRFinancialModelPrototype = () => {
           lpDistribution,
           gpDistribution,
           dscr: noi / annualDebtService,
-          cashYield: (lpDistribution / equityRequired) * 100
+          cashYield: (lpDistribution / equityRequired) * 100,
+          grossIncome: effectiveRentalIncome, // For ReportButton
+          cashFlow: cashFlowAfterDebtService // For ReportButton
         });
       }
       
@@ -233,24 +280,26 @@ const BTRFinancialModelPrototype = () => {
         portfolioValue: initialPortfolioValue,
         portfolioCost: phase1TotalAcquisition,
         portfolioDebt: loanAmount,
-        lpEquity: initialPortfolioValue - loanAmount
+        lpEquity: initialPortfolioValue - loanAmount,
+        value: initialPortfolioValue // For ReportButton
       });
       
       // Add data for each year of the hold period
       for (let year = 1; year <= inputs.holdPeriodYears; year++) {
         const propertyValue3Bed = inputs.marketValue3Bed * Math.pow(1 + inputs.homePriceAppreciation, year);
         const propertyValue4Bed = inputs.marketValue4Bed * Math.pow(1 + inputs.homePriceAppreciation, year);
-        const totalPropertyValue = (propertyValue3Bed * inputs.phase1Bed3) + (propertyValue4Bed * inputs.phase1Bed4);
+        const totalPropertyValueThisYear = (propertyValue3Bed * inputs.phase1Bed3) + (propertyValue4Bed * inputs.phase1Bed4);
         
         // For simplicity, assume no loan amortization in this prototype
         const remainingLoanBalance = loanAmount;
         
         portfolioValueChartData.push({
           year: `Year ${year}`,
-          portfolioValue: totalPropertyValue,
+          portfolioValue: totalPropertyValueThisYear,
           portfolioCost: phase1TotalAcquisition,
           portfolioDebt: remainingLoanBalance,
-          lpEquity: totalPropertyValue - remainingLoanBalance
+          lpEquity: totalPropertyValueThisYear - remainingLoanBalance,
+          value: totalPropertyValueThisYear // For ReportButton
         });
       }
       
@@ -422,6 +471,110 @@ const formatCurrency = (value, short = false) => {
   
   const chartColors = getChartColors();
   
+  // Prepare data for the ReportButton component
+// Find where you define the modelData object and update it to include the new properties:
+const modelData = {
+  fundStructure: "USDV BTR Opportunity Fund",
+  totalHomes: inputs.phase1Homes,
+  threeBedHomes: inputs.phase1Bed3,
+  fourBedHomes: inputs.phase1Bed4,
+  investmentYears: inputs.holdPeriodYears,
+  landCostPerHome: inputs.acquisitionPrice3Bed * 0.2, // Estimate land cost as 20% of acquisition price
+  constructionCostPerHome: inputs.acquisitionPrice3Bed * 0.8, // Estimate construction cost as 80% of acquisition price
+  otherCostsPerHome: 5000, // Placeholder value
+  threeBedRent: inputs.monthlyRent3Bed,
+  fourBedRent: inputs.monthlyRent4Bed,
+  occupancyRate: 1 - inputs.vacancyRate,
+  ltc: inputs.loanToValue,
+  interestRate: inputs.interestRate,
+  loanTerm: 30, // Placeholder value
+  
+  // Add these new properties
+  propertyManagementFee: inputs.propertyManagementFee,
+  maintenanceCosts: inputs.maintenanceCost,
+  propertyTaxRate: inputs.propertyTaxRate,
+  insuranceCostPerHome: inputs.insuranceCostPerHome,
+  hoaFeesPerHome: inputs.hoaFeesPerHome,
+  otherExpensesPerHome: inputs.otherExpensesPerHome,
+  exitStrategy: inputs.exitStrategy // Important for conditional report rendering
+};
+  
+const calculatedResults = {
+  totalInvestment: results.acquisitionSummary.equityRequired || 0,
+  irr: results.returns.irr || 0,
+  cashOnCashReturn: (results.returns.averageAnnualCashYield || 0) / 100,
+  capRate: results.cashFlows && results.cashFlows.length > 0 ? 
+           results.cashFlows[0].noi / results.portfolioValueChartData[0].portfolioValue : 0,
+  equityMultiple: results.returns.equityMultiple || 0,
+  paybackPeriod: 5, // Placeholder value
+  totalAcquisitionCosts: results.acquisitionSummary.totalAcquisitionCost || 0,
+  totalFinancingCosts: 0, // Placeholder value
+  totalProjectCost: results.acquisitionSummary.totalAcquisitionCost || 0,
+  loanAmount: results.acquisitionSummary.loanAmount || 0,
+  equityAmount: results.acquisitionSummary.equityRequired || 0,
+  annualDebtService: results.acquisitionSummary.annualInterestOnlyPayment || 0,
+  threeBedAnnualIncome: inputs.phase1Bed3 * inputs.monthlyRent3Bed * 12 * (1 - inputs.vacancyRate),
+  fourBedAnnualIncome: inputs.phase1Bed4 * inputs.monthlyRent4Bed * 12 * (1 - inputs.vacancyRate),
+  totalAnnualIncome: results.cashFlows && results.cashFlows.length > 0 ? 
+                    results.cashFlows[0].rentalIncome : 0,
+  
+  // Replace these estimated values with directly calculated ones
+  annualPropertyManagement: results.cashFlows && results.cashFlows.length > 0 ? 
+                           results.cashFlows[0].rentalIncome * inputs.propertyManagementFee : 0,
+  annualMaintenance: results.cashFlows && results.cashFlows.length > 0 ? 
+                    results.cashFlows[0].rentalIncome * inputs.maintenanceCost : 0,
+  annualPropertyTaxes: results.portfolioValueChartData && results.portfolioValueChartData.length > 0 ? 
+                      results.portfolioValueChartData[0].portfolioValue * inputs.propertyTaxRate : 0,
+  annualInsurance: inputs.phase1Homes * inputs.insuranceCostPerHome,
+  annualHOAFees: inputs.phase1Homes * inputs.hoaFeesPerHome,
+  otherAnnualExpenses: inputs.phase1Homes * inputs.otherExpensesPerHome,
+  
+  annualVacancyLoss: results.cashFlows && results.cashFlows.length > 0 ? 
+                    results.cashFlows[0].rentalIncome * inputs.vacancyRate / (1 - inputs.vacancyRate) : 0,
+  totalOperatingExpenses: results.cashFlows && results.cashFlows.length > 0 ? 
+                         results.cashFlows[0].operatingExpenses : 0,
+  breakEvenOccupancy: 0.85, // Placeholder value
+  debtServiceCoverageRatio: results.cashFlows && results.cashFlows.length > 0 ? 
+                           results.cashFlows[0].dscr : 0
+};
+  
+  // Prepare exit strategy data
+  const exitStrategy = {
+    portfolioSale: {
+      exitCapRate: inputs.portfolioExitCapRate,
+      exitValue: results.exitSummary.grossSaleProceeds || 0,
+      transactionCosts: results.exitSummary.sellingCosts || 0,
+      remainingLoanBalance: results.exitSummary.remainingLoanBalance || 0,
+      netProceeds: results.exitSummary.netProceedsAfterDebt || 0,
+      estimatedIRR: results.returns.irr || 0
+    },
+    individualSales: {
+      averageHomePrice: (results.exitSummary.grossSaleProceeds || 0) / inputs.phase1Homes,
+      totalSalesValue: results.exitSummary.grossSaleProceeds || 0,
+      transactionCostPercent: inputs.brokerageFee,
+      totalTransactionCosts: results.exitSummary.sellingCosts || 0,
+      netProceeds: results.exitSummary.netProceedsAfterDebt || 0,
+      estimatedIRR: results.returns.irr || 0
+    }
+  };
+  
+  // Convert portfolio value chart data to format needed for ReportButton
+  const portfolioValue = results.portfolioValueChartData.map(item => ({
+    year: item.year.replace('Year ', ''),
+    value: item.portfolioValue
+  }));
+  
+  // Convert cash flows to the format needed for ReportButton
+  const cashFlows = results.cashFlows.map(yearData => ({
+    year: yearData.year,
+    grossIncome: yearData.rentalIncome,
+    operatingExpenses: yearData.operatingExpenses,
+    netOperatingIncome: yearData.noi,
+    debtService: yearData.debtService,
+    cashFlow: yearData.cashFlowAfterDebtService,
+    cashFlowYield: yearData.cashYield / 100
+  }));
+  
   return (
     <div className={`btr-container ${!isDarkMode ? 'btr-light-mode' : ''}`}>
       <button onClick={toggleTheme} className="btr-theme-toggle">
@@ -429,6 +582,13 @@ const formatCurrency = (value, short = false) => {
       </button>
       
       <h1 className="btr-title">USDV BTR Financial Model</h1>
+      <ReportButton 
+        modelData={modelData}
+        calculatedResults={calculatedResults}
+        portfolioValue={portfolioValue}
+        cashFlows={cashFlows}
+        exitStrategy={exitStrategy}
+      />
       
       <div className="btr-grid">
         <div className="btr-card">
@@ -750,6 +910,101 @@ const formatCurrency = (value, short = false) => {
           </select>
         </div>
       </div>
+      
+      {/* Add the Operating Expenses section here - this is the key addition */}
+      <div className="btr-card">
+        <h2 className="btr-section-title">Operating Expenses</h2>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">Property Management Fee</label>
+          <select
+            name="propertyManagementFee"
+            value={inputs.propertyManagementFee}
+            onChange={handleInputChange}
+            className="btr-input"
+          >
+            <option value={0.05}>5%</option>
+            <option value={0.06}>6%</option>
+            <option value={0.07}>7%</option>
+            <option value={0.08}>8%</option>
+            <option value={0.09}>9%</option>
+            <option value={0.10}>10%</option>
+          </select>
+          <p className="btr-note">% of rental income</p>
+        </div>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">Maintenance Cost</label>
+          <select
+            name="maintenanceCost"
+            value={inputs.maintenanceCost}
+            onChange={handleInputChange}
+            className="btr-input"
+          >
+            <option value={0.03}>3%</option>
+            <option value={0.04}>4%</option>
+            <option value={0.05}>5%</option>
+            <option value={0.06}>6%</option>
+            <option value={0.07}>7%</option>
+          </select>
+          <p className="btr-note">% of rental income</p>
+        </div>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">Property Tax Rate</label>
+          <select
+            name="propertyTaxRate"
+            value={inputs.propertyTaxRate}
+            onChange={handleInputChange}
+            className="btr-input"
+          >
+            <option value={0.005}>0.5%</option>
+            <option value={0.0075}>0.75%</option>
+            <option value={0.01}>1.0%</option>
+            <option value={0.0125}>1.25%</option>
+            <option value={0.015}>1.5%</option>
+            <option value={0.0175}>1.75%</option>
+            <option value={0.02}>2.0%</option>
+          </select>
+          <p className="btr-note">% of property value</p>
+        </div>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">Insurance Cost per Home</label>
+          <input
+            type="number"
+            name="insuranceCostPerHome"
+            value={inputs.insuranceCostPerHome}
+            onChange={handleInputChange}
+            className="btr-input"
+          />
+          <p className="btr-note">Annual cost per home</p>
+        </div>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">HOA Fees per Home</label>
+          <input
+            type="number"
+            name="hoaFeesPerHome"
+            value={inputs.hoaFeesPerHome}
+            onChange={handleInputChange}
+            className="btr-input"
+          />
+          <p className="btr-note">Annual HOA fees per home</p>
+        </div>
+        
+        <div className="btr-input-group">
+          <label className="btr-label">Other Expenses per Home</label>
+          <input
+            type="number"
+            name="otherExpensesPerHome"
+            value={inputs.otherExpensesPerHome}
+            onChange={handleInputChange}
+            className="btr-input"
+          />
+          <p className="btr-note">Annual other expenses per home</p>
+        </div>
+      </div>
     </div>
     
     {/* Results Dashboard */}
@@ -809,93 +1064,90 @@ const formatCurrency = (value, short = false) => {
       </div>
     </div>
     
-
-// Portfolio Value Chart 
-<div className="btr-chart-container">
-  <ResponsiveContainer width="100%" height={300}>
-    <LineChart 
-      data={results.portfolioValueChartData} 
-      margin={{ top: 10, right: 30, bottom: 20, left: 30 }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis 
-        dataKey="year" 
-        tick={{ fill: isDarkMode ? "#f9fafb" : "#1f2937" }} 
-      />
-      <YAxis 
-        tick={{ fill: isDarkMode ? "#f9fafb" : "#1f2937" }}
-        tickFormatter={(value) => formatCurrency(value, true)} // true for short format
-      />
-      <Tooltip 
-        formatter={(value) => formatCurrency(value)} 
-        contentStyle={{ 
-          backgroundColor: isDarkMode ? '#2f3c4a' : '#ffffff',
-          borderColor: isDarkMode ? '#5aB6BF' : '#d1d5db',
-          color: isDarkMode ? '#f9fafb' : '#1f2937'
-        }}
-        labelStyle={{
-          color: isDarkMode ? '#f9fafb' : '#1f2937'
-        }}
-        itemStyle={{
-          color: isDarkMode ? '#f9fafb' : '#1f2937'
-        }}
-      />
-      <Legend 
-        wrapperStyle={{
-          color: isDarkMode ? '#f9fafb' : '#1f2937'
-        }}
-      />
-      <Line type="monotone" dataKey="portfolioValue" name="Portfolio Value" stroke={chartColors.portfolioValue} strokeWidth={2} dot={{ r: 4 }} />
-      <Line type="monotone" dataKey="portfolioCost" name="Acquisition Cost" stroke={chartColors.portfolioCost} strokeWidth={2} dot={{ r: 4 }} />
-      <Line type="monotone" dataKey="portfolioDebt" name="Remaining Debt" stroke={chartColors.portfolioDebt} strokeWidth={2} dot={{ r: 4 }} />
-      <Line type="monotone" dataKey="lpEquity" name="LP Equity" stroke={chartColors.lpEquity} strokeWidth={2} dot={{ r: 4 }} />
-    </LineChart>
-  </ResponsiveContainer>
-</div>
+    {/* Portfolio Value Chart */}
+    <div className="btr-chart-container">
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart 
+          data={results.portfolioValueChartData} 
+          margin={{ top: 10, right: 30, bottom: 20, left: 30 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis 
+            dataKey="year" 
+            tick={{ fill: isDarkMode ? "#f9fafb" : "#1f2937" }} 
+          />
+          <YAxis 
+            tick={{ fill: isDarkMode ? "#f9fafb" : "#1f2937" }}
+            tickFormatter={(value) => formatCurrency(value, true)} 
+          />
+          <Tooltip 
+            formatter={(value) => formatCurrency(value)} 
+            contentStyle={{ 
+              backgroundColor: isDarkMode ? '#2f3c4a' : '#ffffff',
+              borderColor: isDarkMode ? '#5aB6BF' : '#d1d5db',
+              color: isDarkMode ? '#f9fafb' : '#1f2937'
+            }}
+            labelStyle={{
+              color: isDarkMode ? '#f9fafb' : '#1f2937'
+            }}
+            itemStyle={{
+              color: isDarkMode ? '#f9fafb' : '#1f2937'
+            }}
+          />
+          <Legend 
+            wrapperStyle={{
+              color: isDarkMode ? '#f9fafb' : '#1f2937'
+            }}
+          />
+          <Line type="monotone" dataKey="portfolioValue" name="Portfolio Value" stroke={chartColors.portfolioValue} strokeWidth={2} dot={{ r: 4 }} />
+          <Line type="monotone" dataKey="portfolioCost" name="Acquisition Cost" stroke={chartColors.portfolioCost} strokeWidth={2} dot={{ r: 4 }} />
+          <Line type="monotone" dataKey="portfolioDebt" name="Remaining Debt" stroke={chartColors.portfolioDebt} strokeWidth={2} dot={{ r: 4 }} />
+          <Line type="monotone" dataKey="lpEquity" name="LP Equity" stroke={chartColors.lpEquity} strokeWidth={2} dot={{ r: 4 }} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
     
-    // Annual Cash Flow Chart
-<div className="btr-chart-container">
-  <ResponsiveContainer width="100%" height={300}>
-    <LineChart 
-      data={cashFlowChartData} 
-      margin={{ top: 10, right: 30, bottom: 20, left: 30 }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis 
-        dataKey="year" 
-        tick={{ fill: isDarkMode ? "#f9fafb" : "#1f2937" }} 
-      />
-      <YAxis 
-        tick={{ fill: isDarkMode ? "#f9fafb" : "#1f2937" }}
-        tickFormatter={(value) => formatCurrency(value, true)} // true for short format
-      />
-      <Tooltip 
-        formatter={(value) => formatCurrency(value)} 
-        contentStyle={{ 
-          backgroundColor: isDarkMode ? '#2f3c4a' : '#ffffff',
-          borderColor: isDarkMode ? '#5aB6BF' : '#d1d5db',
-          color: isDarkMode ? '#f9fafb' : '#1f2937'
-        }}
-        labelStyle={{
-          color: isDarkMode ? '#f9fafb' : '#1f2937'
-        }}
-        itemStyle={{
-          color: isDarkMode ? '#f9fafb' : '#1f2937'
-        }}
-      />
-      <Legend 
-        wrapperStyle={{
-          color: isDarkMode ? '#f9fafb' : '#1f2937'
-        }}
-      />
-      <Line type="monotone" dataKey="noi" name="NOI" stroke={chartColors.noi} strokeWidth={2} />
-      <Line type="monotone" dataKey="debtService" name="Debt Service" stroke={chartColors.debtService} strokeWidth={2} />
-      <Line type="monotone" dataKey="lpDistribution" name="Investor Distribution" stroke={chartColors.lpDistribution} strokeWidth={2} />
-    </LineChart>
-  </ResponsiveContainer>
-</div>
-    
-    {/* Cash Flow Details */}
+    {/* Annual Cash Flow Chart */}
+    <div className="btr-chart-container">
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart 
+          data={cashFlowChartData} 
+          margin={{ top: 10, right: 30, bottom: 20, left: 30 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis 
+            dataKey="year" 
+            tick={{ fill: isDarkMode ? "#f9fafb" : "#1f2937" }} 
+          />
+          <YAxis 
+            tick={{ fill: isDarkMode ? "#f9fafb" : "#1f2937" }}
+            tickFormatter={(value) => formatCurrency(value, true)} 
+          />
+          <Tooltip 
+            formatter={(value) => formatCurrency(value)} 
+            contentStyle={{ 
+              backgroundColor: isDarkMode ? '#2f3c4a' : '#ffffff',
+              borderColor: isDarkMode ? '#5aB6BF' : '#d1d5db',
+              color: isDarkMode ? '#f9fafb' : '#1f2937'
+            }}
+            labelStyle={{
+              color: isDarkMode ? '#f9fafb' : '#1f2937'
+            }}
+            itemStyle={{
+              color: isDarkMode ? '#f9fafb' : '#1f2937'
+            }}
+          />
+          <Legend 
+            wrapperStyle={{
+              color: isDarkMode ? '#f9fafb' : '#1f2937'
+            }}
+          />
+          <Line type="monotone" dataKey="noi" name="NOI" stroke={chartColors.noi} strokeWidth={2} />
+          <Line type="monotone" dataKey="debtService" name="Debt Service" stroke={chartColors.debtService} strokeWidth={2} />
+          <Line type="monotone" dataKey="lpDistribution" name="Investor Distribution" stroke={chartColors.lpDistribution} strokeWidth={2} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>{/* Cash Flow Details */}
     <div className="btr-card btr-full-width">
       <h2 className="btr-section-title">Annual Cash Flow Details</h2>
       <div className="btr-table-container">
