@@ -594,10 +594,15 @@ body.report-modal-open {
 /* Add these styles to your BTRFinancialModel.css file to improve chart readability in dark mode */
 
 /* Enhance axis and legend text visibility in dark mode */
-.recharts-cartesian-axis-tick-value {
-  fill: #ffffff !important; /* Brighter white text for dark mode */
-  font-weight: 500; /* Make text slightly bolder */
+.btr-chart-container .recharts-cartesian-axis-tick-value {
+  fill: #ffffff !important; /* Ensure bright white text in dark mode */
+  font-weight: bold !important;
 }
+
+.btr-light-mode .btr-chart-container .recharts-cartesian-axis-tick-value {
+  fill: #1f2937 !important; /* Dark text in light mode */
+}
+
 
 .recharts-legend-item-text {
   color: #ffffff !important; /* Brighter white text for dark mode */
