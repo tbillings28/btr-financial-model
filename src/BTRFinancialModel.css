@@ -1,224 +1,106 @@
-/* Base styling */
-:root {
-  --primary-color: #5aB6BF;
-  --secondary-color: #f8f9fa;
-  --text-color: #333;
-  --border-color: #ddd;
-  --card-bg-color: #fff;
-  --dark-bg-color: #1a2636;
-  --dark-card-bg-color: #1e293b;
-  --dark-text-color: #f9fafb;
-  --dark-border-color: #374151;
-  --metric-blue: #5aB6BF;
-  --metric-green: #7BE495;
-  --metric-purple: #b39ddb;
-  --metric-orange: #ffcc80;
-  --lp-color: #7BE495;
-  --gp-color: #5aB6BF;
-}
+/* BTR Financial Model Styling - USDV Branding */
 
+/* Main container */
 .btr-container {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  max-width: 1280px;
+  padding: 1.5rem;
+  max-width: 72rem;
   margin: 0 auto;
-  padding: 1rem;
-  background-color: var(--dark-bg-color);
-  color: var(--dark-text-color);
+  background-color: #1f2937; /* Dark background from presentation */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #f9fafb;
 }
 
-.btr-light-mode {
-  background-color: var(--secondary-color);
-  color: var(--text-color);
-}
-
-/* Theme toggle button */
-.btr-theme-toggle {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  z-index: 1000;
-  font-weight: bold;
-}
-
+/* Title */
 .btr-title {
-  font-size: 1.8rem;
-  font-weight: bold;
+  font-size: 1.875rem;
+  font-weight: 700;
   margin-bottom: 1.5rem;
   text-align: center;
+  color: #f9fafb;
+  border-bottom: 2px solid #5aB6BF; /* Teal accent line */
+  padding-bottom: 1rem;
 }
 
-/* Responsive Grid Layout */
+/* Grid layout */
 .btr-grid {
   display: grid;
-  gap: 1rem;
-  width: 100%;
-  box-sizing: border-box;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-/* Default: Single column for mobile */
-.btr-grid {
-  grid-template-columns: 1fr;
-}
-
-/* Two columns for tablets and larger */
 @media (min-width: 768px) {
   .btr-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* Changed to 2 columns per row */
   }
+}
+
+/* Card styles */
+.btr-card {
+  background-color: #2f3c4a; /* Darker card background */
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  margin-bottom: 2rem;
+  border-top: 4px solid #5aB6BF; /* Teal accent border */
+  display: flex;
+  flex-direction: column;
 }
 
 .btr-full-width {
   grid-column: 1 / -1;
 }
 
-/* Card styling */
-.btr-card {
-  background-color: var(--dark-card-bg-color);
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 1.25rem;
-  margin-bottom: 1rem;
-  overflow: auto;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-.btr-light-mode .btr-card {
-  background-color: var(--card-bg-color);
-  border: 1px solid var(--border-color);
-}
-
+/* Section titles */
 .btr-section-title {
   font-size: 1.25rem;
-  margin-top: 0;
+  font-weight: 600;
   margin-bottom: 1rem;
-  color: var(--primary-color);
-  border-bottom: 2px solid var(--primary-color);
+  color: #f9fafb;
+  border-bottom: 1px solid #5aB6BF; /* Teal accent underline */
   padding-bottom: 0.5rem;
 }
 
-/* Input styling */
+/* Input groups */
 .btr-input-group {
   margin-bottom: 1rem;
 }
 
 .btr-label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: #d1d5db;
 }
 
 .btr-input {
   width: 100%;
   padding: 0.5rem;
-  border-radius: 4px;
-  border: 1px solid var(--dark-border-color);
-  background-color: var(--dark-bg-color);
-  color: var(--dark-text-color);
+  background-color: #1f2937;
+  border: 1px solid #4b5563;
+  border-radius: 0.25rem;
   font-size: 1rem;
-  box-sizing: border-box;
+  color: #f9fafb;
 }
 
-.btr-light-mode .btr-input {
-  border: 1px solid var(--border-color);
-  background-color: white;
-  color: var(--text-color);
+.btr-input:focus {
+  outline: none;
+  border-color: #5aB6BF;
+  box-shadow: 0 0 0 3px rgba(90, 182, 191, 0.2);
 }
 
 .btr-note {
-  font-size: 0.8rem;
-  color: #adb5bd;
+  font-size: 0.75rem;
+  color: #9ca3af;
   margin-top: 0.25rem;
 }
 
-.btr-light-mode .btr-note {
-  color: #6c757d;
-}
-
-/* Chart containers */
-.btr-chart-container {
-  margin-bottom: 2rem;
-  padding: 1rem;
-  overflow: hidden;
-}
-
-.btr-chart-title {
-  text-align: center;
-  color: var(--dark-text-color);
-  margin: 0 0 1rem 0;
-  font-weight: bold;
-  font-size: 1.2rem;
-  background-color: var(--primary-color);
-  padding: 0.5rem;
-  border-radius: 4px;
-}
-
-.btr-light-mode .btr-chart-title {
-  color: white;
-}
-
-/* Table styling */
-.btr-table-container {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-  margin-bottom: 1rem;
-  max-width: 100%;
-}
-
-.btr-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.btr-table-header {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.btr-table-cell {
-  padding: 0.75rem;
-  border: 1px solid var(--dark-border-color);
-  text-align: right;
-}
-
-.btr-table-header .btr-table-cell {
-  text-align: center;
-  font-weight: bold;
-}
-
-.btr-table-row:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.btr-light-mode .btr-table-row:nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.03);
-}
-
-.btr-light-mode .btr-table-cell {
-  border: 1px solid var(--border-color);
-}
-
-.btr-table-row:hover {
-  background-color: rgba(90, 182, 191, 0.1);
-}
-
-.btr-row-highlight {
-  background-color: rgba(90, 182, 191, 0.2) !important;
-  font-weight: bold;
-}
-
-/* Metrics dashboard */
+/* Metrics grid */
 .btr-metrics-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
@@ -228,50 +110,113 @@
   }
 }
 
+/* Metric cards - using the presentation's teal color */
 .btr-metric {
   padding: 1rem;
-  border-radius: 6px;
-  text-align: center;
-  color: white;
+  border-radius: 0.5rem;
 }
 
 .btr-metric-title {
-  margin: 0 0 0.5rem 0;
-  font-size: 1rem;
-  font-weight: bold;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
 }
 
 .btr-metric-value {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.875rem;
+  font-weight: 700;
 }
 
+/* Metric colors - all using the USDV teal palette */
 .btr-metric-blue {
-  background-color: var(--metric-blue);
+  background-color: #5aB6BF;
+}
+.btr-metric-blue .btr-metric-title {
+  color: #1f2937;
+}
+.btr-metric-blue .btr-metric-value {
+  color: #1f2937;
 }
 
 .btr-metric-green {
-  background-color: var(--metric-green);
+  background-color: #5aB6BF;
+  opacity: 0.9;
+}
+.btr-metric-green .btr-metric-title {
+  color: #1f2937;
+}
+.btr-metric-green .btr-metric-value {
+  color: #1f2937;
 }
 
 .btr-metric-purple {
-  background-color: var(--metric-purple);
+  background-color: #5aB6BF;
+  opacity: 0.8;
+}
+.btr-metric-purple .btr-metric-title {
+  color: #1f2937;
+}
+.btr-metric-purple .btr-metric-value {
+  color: #1f2937;
 }
 
 .btr-metric-orange {
-  background-color: var(--metric-orange);
+  background-color: #5aB6BF;
+  opacity: 0.7;
+}
+.btr-metric-orange .btr-metric-title {
+  color: #1f2937;
+}
+.btr-metric-orange .btr-metric-value {
+  color: #1f2937;
 }
 
-/* Profit split visualization */
+/* Chart container */
+.btr-chart-container {
+  height: 300px;
+  width: 100%;
+  background-color: #2f3c4a;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Table styling */
+.btr-table-container {
+  overflow-x: auto;
+}
+
+.btr-table {
+  min-width: 100%;
+  border-collapse: collapse;
+}
+
+.btr-table-header {
+  background-color: #5aB6BF;
+  color: #1f2937;
+}
+
+.btr-table-cell {
+  padding: 0.5rem;
+  border: 1px solid #4b5563;
+}
+
+.btr-table-row:nth-child(even) {
+  background-color: #374151;
+}
+
+/* New styles for the LP/GP split display */
 .btr-profit-split-display {
-  margin: 1.5rem 0;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #5aB6BF;
 }
 
 .btr-profit-split-title {
   font-size: 1rem;
-  margin-bottom: 0.5rem;
-  text-align: center;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #f9fafb;
 }
 
 .btr-profit-split-bars {
@@ -279,111 +224,612 @@
 }
 
 .btr-profit-split-bar {
-  height: 30px;
-  width: 100%;
-  display: flex;
-  border-radius: 4px;
+  height: 2rem;
+  border-radius: 0.25rem;
   overflow: hidden;
+  display: flex;
+  width: 100%;
 }
 
 .btr-segment-lp {
-  background-color: var(--lp-color);
+  background-color: #5aB6BF; /* LP segment color */
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1a2636;
-  font-weight: bold;
+  color: #1f2937;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: width 0.3s ease;
 }
 
 .btr-segment-gp {
-  background-color: var(--gp-color);
+  background-color: #3f8088; /* GP segment color - darker teal */
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: #1f2937;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: width 0.3s ease;
+}
+
+/* Exit summary highlighting */
+.btr-row-highlight {
   font-weight: bold;
+  background-color: #5aB6BF !important;
+  color: #1f2937;
 }
 
-/* Cost summary styling */
-.btr-cost-summary {
-  width: 100%;
+/* Custom theme toggle button */
+.btr-theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #5aB6BF;
+  color: #1f2937;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
-.btr-cost-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--dark-border-color);
+.btr-theme-toggle:hover {
+  background-color: #3f8088;
 }
 
-.btr-light-mode .btr-cost-row {
-  border-bottom: 1px solid var(--border-color);
+/* Light mode theme */
+.btr-light-mode {
+  background-color: #f9fafb;
+  color: #1f2937;
 }
 
-.btr-cost-label {
-  font-weight: bold;
+.btr-light-mode .btr-title {
+  color: #1f2937;
 }
 
-.btr-cost-value {
-  text-align: right;
+.btr-light-mode .btr-card {
+  background-color: white;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
-.btr-cost-total {
-  font-weight: bold;
-  border-bottom: 2px solid var(--primary-color);
-  font-size: 1.1rem;
+.btr-light-mode .btr-section-title {
+  color: #1f2937;
 }
 
-/* Mobile responsiveness for tables */
-@media (max-width: 768px) {
+.btr-light-mode .btr-label {
+  color: #4b5563;
+}
+
+.btr-light-mode .btr-input {
+  background-color: white;
+  border-color: #d1d5db;
+  color: #1f2937;
+}
+
+.btr-light-mode .btr-table-cell {
+  border-color: #e5e7eb;
+}
+
+.btr-light-mode .btr-table-row:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+/* Print styles */
+@media print {
+  .btr-container {
+    padding: 0;
+    background-color: white;
+    color: black;
+  }
+  
+  .btr-card {
+    box-shadow: none;
+    border: 1px solid #e5e7eb;
+    page-break-inside: avoid;
+  }
+  
+  /* Hide input sections for printing */
+  .btr-grid {
+    display: none;
+  }
+  
+  /* Ensure charts and tables print properly */
+  .btr-chart-container {
+    height: 400px;
+  }
+  
   .btr-table {
-    font-size: 0.75rem;
+    page-break-inside: avoid;
   }
   
-  .btr-table-cell {
-    padding: 0.5rem;
+  /* Add page breaks between major sections */
+  .btr-card.btr-full-width {
+    page-break-after: always;
+  }
+  
+  .btr-theme-toggle {
+    display: none;
   }
 }
 
-/* Ensure all charts are responsive */
-.recharts-responsive-container {
-  width: 100% !important;
-  height: auto !important;
+/* Chart container with better background contrast in light mode */
+.btr-chart-container {
+  height: 300px;
+  width: 100%;
+  background-color: #2f3c4a; /* Dark background for dark mode */
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 
-/* Fix for dark mode tooltips */
-.recharts-tooltip-wrapper {
+/* Light mode chart container with appropriate background */
+.btr-light-mode .btr-chart-container {
+  background-color: #f5f7fa; /* Light gray background for light mode */
+  border: 1px solid #e2e8f0;
+}
+
+/* Fix for axis text in both modes */
+.recharts-cartesian-axis-tick-value {
+  fill: #f9fafb; /* Light text for dark mode */
+}
+
+.btr-light-mode .recharts-cartesian-axis-tick-value {
+  fill: #1f2937; /* Dark text for light mode */
+}
+
+/* Fix for CartesianGrid in both modes */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #f9fafb;
+  stroke-opacity: 0.2;
+}
+
+.btr-light-mode .recharts-cartesian-grid-horizontal line,
+.btr-light-mode .recharts-cartesian-grid-vertical line {
+  stroke: #1f2937;
+  stroke-opacity: 0.2;
+}
+
+/* Fix for legend text in both modes */
+.recharts-legend-item-text {
+  color: #f9fafb !important; /* Light text for dark mode */
+}
+
+.btr-light-mode .recharts-legend-item-text {
+  color: #1f2937 !important; /* Dark text for light mode */
+}
+
+/* Make sure tooltip has good contrast in both modes */
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: #2f3c4a !important;
+  border-color: #5aB6BF !important;
+  color: #f9fafb !important;
+}
+
+.btr-light-mode .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: #ffffff !important;
+  border-color: #d1d5db !important;
+  color: #1f2937 !important;
+}
+
+/* Fix label text in tooltip for both modes */
+.recharts-tooltip-item-name,
+.recharts-tooltip-item-value {
+  color: #f9fafb !important;
+}
+
+.btr-light-mode .recharts-tooltip-item-name,
+.btr-light-mode .recharts-tooltip-item-value {
+  color: #1f2937 !important;
+}
+
+/* Report Button and Modal styles */
+.report-button {
+  background-color: #4361ee;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+.report-button:hover {
+  background-color: #3a56d4;
+}
+
+.report-button:active {
+  background-color: #2e46c0;
+}
+
+/* Add Font Awesome icon for report */
+.report-button::before {
+  content: "\f15c"; /* File icon */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+}
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
   z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  padding: 20px;
 }
 
-/* Make sure elements don't overflow their containers */
-img, svg, canvas, iframe {
-  max-width: 100%;
-  height: auto;
+/* Hide scrollbar for Chrome, Safari and Opera */
+.modal-overlay::-webkit-scrollbar {
+  display: none;
 }
 
-/* Form element layout improvement */
-@media (min-width: 992px) {
-  .btr-input-group {
-    display: flex;
-    align-items: center;
-  }
-  
-  .btr-label {
-    flex: 0 0 40%;
-    margin-bottom: 0;
-    margin-right: 1rem;
-  }
-  
-  .btr-input {
-    flex: 1;
-  }
-  
-  .btr-note {
-    flex: 0 0 100%;
-    margin-top: 0.25rem;
-    margin-left: calc(40% + 1rem);
-  }
+/* Hide scrollbar for IE, Edge and Firefox */
+.modal-overlay {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Make sure light/dark mode considerations are handled for the report */
+.btr-light-mode .modal-overlay .printable-report-container {
+  background-color: white;
+  color: #333;
+}
+
+.modal-overlay .printable-report-container {
+  width: 100%;
+  max-width: 1100px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background-color: white;
+  color: #333; /* Ensure text is always dark in report */
+}
+
+/* Print button enhancements */
+.print-button {
+  background-color: #4CAF50;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  z-index: 2;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+  margin: 5px;
+}
+
+.print-button::before {
+  content: "\f02f"; /* Print icon */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+}
+
+/* Close button enhancements */
+.close-button {
+  background-color: #f44336;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  z-index: 2;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+  margin: 5px;
+}
+
+.close-button::before {
+  content: "\f00d"; /* Close icon */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+}
+
+/* Download button */
+.download-button {
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  z-index: 2;
+  font-size: 16px;
+  min-width: 150px;
+  margin: 5px;
+}
+
+.download-button:hover {
+  background-color: #e68a00;
+}
+
+.download-button:active {
+  background-color: #cc7a00;
+}
+
+.download-button::before {
+  content: "\f1c1"; /* PDF file icon */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+}
+
+/* Prevent body scrolling when modal is open */
+body.report-modal-open {
+  overflow: hidden;
+}
+/* Add these styles to your BTRFinancialModel.css file to improve chart readability in dark mode */
+
+/* Enhance axis and legend text visibility in dark mode */
+.btr-chart-container .recharts-cartesian-axis-tick-value {
+  fill: #ffffff !important; /* Ensure bright white text in dark mode */
+  font-weight: bold !important;
+}
+
+.btr-light-mode .btr-chart-container .recharts-cartesian-axis-tick-value {
+  fill: #1f2937 !important; /* Dark text in light mode */
+}
+
+
+.recharts-legend-item-text {
+  color: #ffffff !important; /* Brighter white text for dark mode */
+  font-weight: 500; /* Make text slightly bolder */
+}
+
+/* Make grid lines more visible but not distracting */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #4b5563 !important; /* Lighter gray for grid lines */
+  stroke-opacity: 0.4 !important; /* Increase opacity */
+}
+
+/* Enhance tooltip contrast */
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: rgba(47, 60, 74, 0.95) !important; /* More opaque background */
+  border: 2px solid #5aB6BF !important; /* Thicker border */
+  padding: 10px !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important; /* Add shadow for depth */
+}
+
+.recharts-tooltip-item-name,
+.recharts-tooltip-item-value,
+.recharts-tooltip-label {
+  color: #ffffff !important; /* Brighter white for tooltip text */
+  font-weight: 500 !important; /* Slightly bolder text */
+}
+
+/* Improve legend container contrast */
+.recharts-legend-wrapper {
+  background-color: rgba(31, 41, 55, 0.7) !important; /* Semi-transparent dark background */
+  border-radius: 4px;
+  padding: 4px 8px !important;
+}
+
+/* Make dots larger for better visibility */
+.recharts-dot circle {
+  r: 5 !important; /* Larger dots */
+  stroke-width: 2 !important; /* Thicker stroke */
+}
+
+/* Make chart lines thicker */
+.recharts-line-curve {
+  stroke-width: 3 !important; /* Thicker lines */
+}
+
+/* Keep light mode working properly */
+.btr-light-mode .recharts-cartesian-axis-tick-value {
+  fill: #1f2937 !important; /* Dark text for light mode */
+}
+
+.btr-light-mode .recharts-legend-item-text {
+  color: #1f2937 !important; /* Dark text for light mode */
+}
+
+.btr-light-mode .recharts-cartesian-grid-horizontal line,
+.btr-light-mode .recharts-cartesian-grid-vertical line {
+  stroke: #d1d5db !important; /* Lighter gray for grid lines in light mode */
+  stroke-opacity: 0.7 !important;
+}
+
+.btr-light-mode .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #5aB6BF !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.btr-light-mode .recharts-tooltip-item-name,
+.btr-light-mode .recharts-tooltip-item-value,
+.btr-light-mode .recharts-tooltip-label {
+  color: #1f2937 !important;
+}
+
+.btr-light-mode .recharts-legend-wrapper {
+  background-color: rgba(249, 250, 251, 0.8) !important;
+}/* Add these enhanced styles to the bottom of your BTRFinancialModel.css file */
+
+/* Better contrast for dark mode charts - overrides previous settings */
+.recharts-text {
+  fill: #ffffff !important; /* Pure white text */
+  font-weight: 600 !important; /* Bold text */
+  font-size: 13px !important; /* Slightly larger font */
+}
+
+.recharts-cartesian-axis-tick-value {
+  fill: #ffffff !important; /* Pure white text */
+  font-weight: 600 !important; /* Bold text */
+  font-size: 13px !important; /* Slightly larger font */
+  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.8) !important; /* Text shadow for better contrast */
+}
+
+.recharts-legend-item-text {
+  color: #ffffff !important; /* Pure white text */
+  font-weight: 600 !important; /* Bold text */
+  font-size: 14px !important; /* Larger font */
+}
+
+/* Stronger background for legend */
+.recharts-default-legend {
+  background-color: rgba(0, 0, 0, 0.6) !important; /* Darker semi-transparent background */
+  padding: 5px 10px !important;
+  border-radius: 4px !important;
+}
+
+/* Make grid lines stand out more */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #6b7280 !important; /* Much lighter gray for grid lines */
+  stroke-opacity: 0.6 !important; /* Higher opacity */
+}
+
+/* Make chart lines even thicker */
+.recharts-line-curve {
+  stroke-width: 3.5 !important; /* Thicker lines */
+}
+
+/* Make dots more prominent */
+.recharts-dot {
+  stroke-width: 2.5 !important; /* Thicker outlines */
+}
+
+.recharts-dot circle {
+  r: 5.5 !important; /* Larger dots */
+}
+
+/* Ensure tooltip is very visible */
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: rgba(0, 0, 0, 0.85) !important; /* Nearly opaque dark background */
+  border: 3px solid #5aB6BF !important; /* Prominent border */
+  padding: 12px !important;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.5) !important; /* Stronger shadow */
+}
+
+.recharts-tooltip-item {
+  font-size: 14px !important; /* Larger text */
+  padding: 4px 0 !important; /* More spacing between items */
+}
+
+.recharts-tooltip-item-name,
+.recharts-tooltip-item-value,
+.recharts-tooltip-label {
+  color: #ffffff !important; /* Pure white */
+  font-weight: 600 !important; /* Bold text */
+}
+
+/* Make light mode override with stronger styling */
+.btr-light-mode .recharts-text,
+.btr-light-mode .recharts-cartesian-axis-tick-value {
+  fill: #000000 !important; /* Pure black text for light mode */
+  text-shadow: none !important;
+}
+
+.btr-light-mode .recharts-legend-item-text {
+  color: #000000 !important; /* Pure black text for light mode */
+}
+
+.btr-light-mode .recharts-default-legend {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.btr-light-mode .recharts-cartesian-grid-horizontal line,
+.btr-light-mode .recharts-cartesian-grid-vertical line {
+  stroke: #9ca3af !important; /* Medium gray for grid lines in light mode */
+}
+
+.btr-light-mode .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: rgba(255, 255, 255, 0.97) !important;
+  border-color: #5aB6BF !important;
+}
+
+.btr-light-mode .recharts-tooltip-item-name,
+.btr-light-mode .recharts-tooltip-item-value,
+.btr-light-mode .recharts-tooltip-label {
+  color: #000000 !important; /* Pure black */
+}/* Add these specific legend fixes to the bottom of your CSS file */
+
+/* Target the specific legend container with a bright background */
+.recharts-legend-wrapper {
+  background-color: rgba(40, 50, 65, 0.9) !important; /* Dark but translucent background */
+  border: 2px solid #5aB6BF !important; /* Teal border to match theme */
+  border-radius: 6px !important;
+  padding: 6px 10px !important;
+  margin: 5px !important;
+}
+
+/* Make legend text extremely visible */
+.recharts-legend-item-text {
+  color: #ffffff !important; /* Pure white */
+  font-weight: bold !important;
+  font-size: 14px !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important; /* Dark shadow for contrast */
+  margin-left: 5px !important;
+}
+
+/* Add more contrast to the legend line/symbol */
+.recharts-legend-item-line {
+  stroke-width: 4px !important; /* Thicker lines in legend */
+}
+
+/* Increase spacing between legend items */
+.recharts-legend-item {
+  margin-right: 15px !important;
+}
+
+/* Style the bottom legend specifically - where readability seems worst */
+.recharts-legend-wrapper:last-child {
+  background-color: #1a2636 !important; /* Solid darker background */
+  border: 2px solid #5aB6BF !important;
+  padding: 8px 12px !important;
+  margin-top: 10px !important;
+}
+
+/* Light mode overrides */
+.btr-light-mode .recharts-legend-wrapper {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border: 2px solid #5aB6BF !important;
+}
+
+.btr-light-mode .recharts-legend-item-text {
+  color: #000000 !important; /* Black text for light mode */
+  text-shadow: none !important;
+}
+
+/* Add colored boxes in legend for better visibility */
+.recharts-legend-icon {
+  width: 16px !important;
+  height: 16px !important;
+  margin-right: 5px !important;
+  border: 1px solid white !important;
 }
